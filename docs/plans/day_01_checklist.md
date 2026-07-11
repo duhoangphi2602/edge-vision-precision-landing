@@ -145,18 +145,18 @@
 ## 6. Laptop (Machine A): Quy tắc vận hành 3 - Code Commit cuối ngày
 **Mục tiêu:** Đóng băng trạng thái hoàn thành Day 1.
 
-- [ ] **Trên Laptop (Machine A)**, chạy lệnh:
+- [x] **Trên Laptop (Machine A)**, chạy lệnh:
   ```bash
   cd ~/Projects/edge-vision-precision-landing
   git init
   git add .
   git commit -m "day01: initialize product roadmap, requirements and folder structures"
   ```
-- [ ] Chạy `git log -1` để kiểm tra commit đã thành công chưa.
+- [x] Chạy `git log -1` để kiểm tra commit đã thành công chưa.
 
 ## 7. Nghiệm thu Day 1 (Acceptance)
 - [x] Code và tài liệu chuẩn đã nằm đúng trong `edge-vision-uav-landing`.
-- [ ] Đã có `.gitignore` chặn được tệp rác.
+- [x] Đã có `.gitignore` chặn được tệp rác.
 - [x] Đã viết xong `day_01.md`.
 - [x] Đã tạo metric baseline đầu tiên.
-- [ ] Đã commit code thành công.
+- [x] Đã commit code thành công.
