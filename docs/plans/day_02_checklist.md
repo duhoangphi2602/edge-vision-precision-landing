@@ -7,7 +7,7 @@
 - **Vì sao dùng YAML cho cấu hình?** Việc tách biệt tham số (độ phân giải camera, threshold, marker ID) ra khỏi code giúp ta dễ dàng chuyển đổi cấu hình khi đổi môi trường (webcam laptop sang camera trên UAV) mà không cần sửa source code.
 - **Tách `overlay.py` để làm gì?** Trong hệ thống thực tế, module vẽ UI (overlay) không nên can thiệp vào logic thuật toán (perception). Việc tách riêng giúp sau này tích hợp YOLO hay thuật toán khác đều dùng chung một bộ công cụ hiển thị.
 
-- [ ] **Mở terminal trên Laptop (Machine A)** và tạo các file cần thiết:
+- [x] **Mở terminal trên Laptop (Machine A)** và tạo các file cần thiết:
 ```bash
 cd ~/Projects/edge-vision-precision-landing/edge-vision-uav-landing
 touch configs/perception.yaml
@@ -15,7 +15,7 @@ touch src/utils/overlay.py
 touch src/perception/__init__.py
 touch src/utils/__init__.py
 ```
-- [ ] Chèn nội dung sau vào `configs/perception.yaml`:
+- [x] Chèn nội dung sau vào `configs/perception.yaml`:
 ```yaml
 camera:
   source: 0 # 0 for default webcam, or path to video file
@@ -29,7 +29,7 @@ target:
   aruco_dict: "DICT_4X4_50"
   target_id: 0
 ```
-- [ ] Chèn nội dung sau vào `src/utils/overlay.py`:
+- [x] Chèn nội dung sau vào `src/utils/overlay.py`:
 ```python
 import cv2
 
@@ -55,12 +55,12 @@ def draw_detection_info(frame, corners, center, target_id, error_x, error_y):
 💡 **Quyết định kiến trúc & Giải thích:**
 - **Pixel Error ($e_x, e_y$):** Là sự chênh lệch tọa độ $x, y$ giữa tâm của marker nhận diện được và tâm của camera. Nếu $e_x = 0, e_y = 0$ nghĩa là drone đang ở vị trí hoàn hảo để hạ cánh xuống marker. Dữ liệu này sẽ là Input sinh tử cho module PID ở Day 4.
 
-- [ ] Tạo các file mã nguồn:
+- [x] Tạo các file mã nguồn:
 ```bash
 touch src/perception/video_reader.py
 touch src/perception/aruco_detector.py
 ```
-- [ ] Chèn nội dung sau vào `src/perception/video_reader.py`:
+- [x] Chèn nội dung sau vào `src/perception/video_reader.py`:
 ```python
 import cv2
 
@@ -69,7 +69,7 @@ class VideoReader:
         # Thêm cờ CAP_V4L2 để fix lỗi timeout trên Linux
         self.cap = cv2.VideoCapture(source, cv2.CAP_V4L2)
         # Ép camera xuất định dạng YUYV vì luồng MJPG đang bị nhiễu và vỡ ảnh (Corrupt JPEG data)
-        self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'YUYV'))
+        self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'YUYV'))  # type: ignore
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
@@ -82,7 +82,7 @@ class VideoReader:
     def release(self):
         self.cap.release()
 ```
-- [ ] Chèn nội dung sau vào `src/perception/aruco_detector.py`:
+- [x] Chèn nội dung sau vào `src/perception/aruco_detector.py`:
 ```python
 import cv2
 import numpy as np
@@ -97,8 +97,8 @@ class ArucoDetector:
             self.detector = cv2.aruco.ArucoDetector(self.aruco_dict, self.parameters)
         except AttributeError:
             # Fallback cho OpenCV cũ
-            self.aruco_dict = cv2.aruco.Dictionary_get(getattr(cv2.aruco, dict_type))
-            self.parameters = cv2.aruco.DetectorParameters_create()
+            self.aruco_dict = cv2.aruco.Dictionary_get(getattr(cv2.aruco, dict_type))  # type: ignore
+            self.parameters = cv2.aruco.DetectorParameters_create()  # type: ignore
             self.detector = None
 
     def detect(self, frame):
@@ -106,7 +106,7 @@ class ArucoDetector:
         if self.detector:
             corners, ids, _ = self.detector.detectMarkers(gray)
         else:
-            corners, ids, _ = cv2.aruco.detectMarkers(gray, self.aruco_dict, parameters=self.parameters)
+            corners, ids, _ = cv2.aruco.detectMarkers(gray, self.aruco_dict, parameters=self.parameters)  # type: ignore
         
         if ids is not None:
             for i in range(len(ids)):
@@ -131,11 +131,11 @@ class ArucoDetector:
 ## 3. Laptop (Machine A): Script chạy chính & Export Log (Metric Rule)
 **Mục tiêu:** Ráp nối các module thành pipeline hoàn chỉnh và tuân thủ yêu cầu ghi log liên tục để có dữ liệu cho hệ thống control phía sau.
 
-- [ ] Tạo file script thực thi:
+- [x] Tạo file script thực thi:
 ```bash
 touch scripts/run_perception.py
 ```
-- [ ] Chèn nội dung sau vào `scripts/run_perception.py`:
+- [x] Chèn nội dung sau vào `scripts/run_perception.py`:
 ```python
 import time
 import yaml
@@ -154,6 +154,7 @@ def main():
     # Load Config
     with open("configs/perception.yaml", "r") as f:
         config = yaml.safe_load(f)
+        assert isinstance(config, dict), "Config must be a dictionary"
 
     cam_cfg = config["camera"]
     target_cfg = config["target"]
