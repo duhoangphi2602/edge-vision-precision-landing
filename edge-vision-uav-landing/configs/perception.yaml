@@ -1,0 +1,11 @@
+camera:
+  source: 0 # default webcam
+  width: 640
+  height: 480
+  fps: 30
+
+target:
+  center_x: 320 # camera_width / 2
+  center_y: 240 # camera_height / 2
+  aruco_dict: "DICT_4X4_50"
+  target_id: 0
