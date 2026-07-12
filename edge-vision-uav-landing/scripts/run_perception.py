@@ -15,6 +15,7 @@ def main():
     # Load Config
     with open("configs/perception.yaml", "r") as f:
         config = yaml.safe_load(f)
+        assert isinstance(config, dict), "Config must be a dictionary"
 
     cam_cfg = config["camera"]
     target_cfg = config["target"]
@@ -25,6 +26,8 @@ def main():
     detector = ArucoDetector(dict_type=target_cfg["aruco_dict"], target_id=target_cfg["target_id"])
 
     # Setup CSV Log (Ghi đè file baseline ngày 1)
+    import os
+    os.makedirs("logs", exist_ok=True)
     log_file = open("logs/perception_baseline.csv", "w")
     log_file.write("timestamp_ns,frame_id,detected,error_x,error_y,latency_ms\n")
 

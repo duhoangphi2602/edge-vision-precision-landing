@@ -1,0 +1,7 @@
+{
+  "extraPaths": [
+    "/home/phi/Projects/edge-vision-precision-landing/edge-vision-uav-landing",
+    "/home/phi/Projects/edge-vision-precision-landing/edge-vision-uav-landing/src",
+    "/home/phi/Projects/edge-vision-precision-landing/.venv/lib/python3.14/site-packages"
+  ]
+}

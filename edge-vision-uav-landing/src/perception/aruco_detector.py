@@ -11,20 +11,21 @@ class ArucoDetector:
             self.detector = cv2.aruco.ArucoDetector(self.aruco_dict, self.parameters)
         except AttributeError:
             # Fallback cho OpenCV cũ
-            self.aruco_dict = cv2.aruco.Dictionary_get(getattr(cv2.aruco, dict_type))
-            self.parameters = cv2.aruco.DetectorParameters_create()
-            self.detector = None
+            self.aruco_dict = cv2.aruco.Dictionary_get(getattr(cv2.aruco, dict_type))  # type: ignore
+            self.parameters = cv2.aruco.DetectorParameters_create()  # type: ignore
+            self.detector = None  # type: ignore
 
     def detect(self, frame):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         if self.detector:
             corners, ids, _ = self.detector.detectMarkers(gray)
         else:
-            corners, ids, _ = cv2.aruco.detectMarkers(gray, self.aruco_dict, parameters=self.parameters)
+            corners, ids, _ = cv2.aruco.detectMarkers(gray, self.aruco_dict, parameters=self.parameters)  # type: ignore
           
         if ids is not None:
+            ids = ids.flatten()
             for i in range(len(ids)):
-                if ids[i][0] == self.target_id:
+                if ids[i] == self.target_id:
                     # Tính tâm của marker
                     c = corners[i][0]
                     center_x = (c[0][0] + c[2][0]) / 2.0
