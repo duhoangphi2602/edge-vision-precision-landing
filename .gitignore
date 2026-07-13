@@ -17,4 +17,9 @@ edge-ai-training/models/
 *.bag
 *.ulg
 .DS_Store
-.vscode/
+.vscode/pyrightconfig.json
+.vscode/settings.json
+pyrightconfig.json
+edge-vision-uav-landing/pyrightconfig.json
+edge-ai-training/runs/
+
