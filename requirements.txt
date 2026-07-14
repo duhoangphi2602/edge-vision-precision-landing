@@ -11,3 +11,4 @@ onnxruntime
 ultralytics
 psutil
 rich
+types-PyYAML
