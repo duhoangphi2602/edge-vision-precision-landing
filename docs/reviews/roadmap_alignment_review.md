@@ -1,31 +1,14 @@
 # Roadmap Alignment Review
 
-- **Workspace hiện tại có bám roadmap không?**
-  Yes. The current structure mirrors the ROADMAP.md specifications for Day 1 completion.
-  
-- **Tên Project 1 có đúng không?**
-  Yes. The folder is correctly named `edge-vision-uav-landing/`.
-
-- **Có dùng sai `precision-landing-uav-sitl` không?**
-  No. The folder uses the correct `edge-vision-uav-landing/` naming convention. (Although `ENVIRONMENT_CONTEXT.md` mentions `precision-landing-uav-sitl` internally as an alias, the actual folder on disk correctly aligns with the stricter naming requirement).
-
-- **`edge-ai-training/` có đang được hiểu đúng là workspace hỗ trợ không?**
-  Yes. It is maintained outside Project 1 and Project 2, strictly acting as a supporting ML operations environment for Machine B.
-
-- **Project 2 đã bị triển khai quá sớm chưa?**
-  No. `gimbal-video-stabilization-analyzer/` has not been created yet, which is the correct behavior.
-
-- **Các file trong `edge-vision-uav-landing/` có phù hợp với roadmap không?**
-  Yes. All required markdown stubs (11 files) and necessary source directories (`src/perception`, `configs`, `scripts`, `logs`, etc.) were created as per Day 1's requirements.
-
-- **Có thiếu file quan trọng nào không?**
-  No. All required documentation files, `.gitignore`, and `requirements.txt` are present.
-
-- **Có file nào đang nằm sai vị trí không?**
-  No. Everything is correctly placed within either `edge-vision-uav-landing`, `edge-ai-training`, or `docs`.
-
-- **Có phù hợp workflow 2 máy không?**
-  Yes. Tasks and structures are clearly divided into Machine A (Laptop - System/UAV) and Machine B (PC GPU - ML/Training).
-
-- **Có phù hợp Ubuntu 26.04, CPU-first laptop, GPU-first PC không?**
-  Yes. The project separates the YOLO training workspace (PC GPU) from the CPU-first controller node (Laptop), allowing for local `.venv` execution on both Ubuntu instances before shifting to Docker later.
+- Workspace hiện tại có bám roadmap không? **Có.** Các thư mục phân tách rõ ràng.
+- DAY_03 có đúng thứ tự roadmap không? **Đúng.** Day 1 và Day 2 đã hoàn thành.
+- Tên Project 1 có đúng không? **Đúng.** Là `edge-vision-uav-landing/`.
+- Folder Project 1 có đúng `edge-vision-uav-landing/` không? **Đúng.**
+- Có dùng sai `precision-landing-uav-sitl` không? **Không dùng tên này cho thư mục.**
+- `edge-ai-training/` có đang được hiểu đúng là workspace hỗ trợ không? **Đúng.** Nằm ở root, riêng rẽ với code deploy.
+- Project 2 đã bị triển khai quá sớm chưa? **Chưa.** Không có thư mục của project 2.
+- Các file trong `edge-vision-uav-landing/` có phù hợp với roadmap không? **Có.** Đủ docs, cấu trúc src/ theo roadmap.
+- Có thiếu file quan trọng nào không? **Không.**
+- Có file nào đang nằm sai vị trí không? **Không.**
+- Có phù hợp workflow 2 máy không? **Có.** Log Day 1 và Day 2 cho thấy sự tách biệt rõ ràng Machine A và Machine B.
+- Có phù hợp Ubuntu 26.04, CPU-first laptop, GPU-first PC không? **Phù hợp.** Quyết định không dùng cv2.flip, dùng V4L2 phù hợp với môi trường Linux.
