@@ -22,4 +22,5 @@ edge-ai-training/models/
 pyrightconfig.json
 edge-vision-uav-landing/pyrightconfig.json
 edge-ai-training/runs/
+**/*.pt
 

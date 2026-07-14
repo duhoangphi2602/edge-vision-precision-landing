@@ -13,8 +13,6 @@ class VideoReader:
         ret, frame = self.cap.read()
         if not ret:
             return None
-        # Lật ngược hình ảnh theo chiều ngang (trục Y) để sửa lỗi mirror
-        frame = cv2.flip(frame, 1)
         return frame
 
     def release(self):
