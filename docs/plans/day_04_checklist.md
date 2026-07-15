@@ -247,7 +247,7 @@ cd ~/Projects/edge-vision-precision-landing/edge-ai-training
 source ../.venv/bin/activate
 yolo detect train data=VisDrone.yaml model=yolo11n.pt epochs=30 patience=10 imgsz=960 batch=8 device=0 seed=42 deterministic=True cache=disk project=experiments name=TRN_002_visdrone_yolo11n_960
 ```
-- [ ] **[Machine B] Thao tác 11:** Trong lúc máy Train, đi uống cà phê. Sau khi xong, thu thập `results.csv` của cả 2 bản để xuất báo cáo so sánh vào `edge-ai-training/reports/resolution_ablation_v0.md`.
+- [x] **[Machine B] Thao tác 11:** Trong lúc máy Train, đi uống cà phê. Sau khi xong, thu thập `results.csv` của cả 2 bản để xuất báo cáo so sánh vào `edge-ai-training/reports/resolution_ablation_v0.md`.
 
 ## Phase 6 — Documentation và Git
 **Mục tiêu:** Lưu trữ kết quả chính xác, không "fake" log và tuân thủ nguyên tắc "Git clean".
@@ -274,15 +274,15 @@ touch daily_logs/day_04.md
 - Auto-batch (`batch=-1`) làm nhiễu kết quả ablation giữa TRN_001 và TRN_002 do batch size tự động co giãn theo imgsz. Cần lưu ý trong so sánh.
 ```
 
-- [ ] **Cập nhật `next_action_plan.md`:** Thêm task chuẩn bị cho Day 05 (Replay mode + Fault injection).
-- [ ] **Kiểm tra Evidence:** Đảm bảo `pid_simulation_summary.csv` và `COMMAND.txt` (nếu có bổ sung) thực sự tồn tại trên disk.
-- [ ] **Kiểm tra Git:** Đảm bảo đang đứng ở root repository tổng:
+- [x] **Cập nhật `next_action_plan.md`:** Thêm task chuẩn bị cho Day 05 (Replay mode + Fault injection).
+- [x] **Kiểm tra Evidence:** Đảm bảo `pid_simulation_summary.csv` và `COMMAND.txt` (nếu có bổ sung) thực sự tồn tại trên disk.
+- [x] **Kiểm tra Git:** Đảm bảo đang đứng ở root repository tổng:
 ```bash
 cd ~/Projects/edge-vision-precision-landing
 git status
 ```
-- [ ] **Review staged diff:** `git diff --staged` để chắc chắn không vô tình add file rác.
-- [ ] **Commit an toàn:** Sau khi Quality Gate pass, thực hiện commit:
+- [x] **Review staged diff:** `git diff --staged` để chắc chắn không vô tình add file rác.
+- [x] **Commit an toàn:** Sau khi Quality Gate pass, thực hiện commit:
 ```bash
 git add edge-vision-uav-landing/src/ edge-vision-uav-landing/tests/ edge-vision-uav-landing/scripts/ edge-vision-uav-landing/reports/ edge-vision-uav-landing/daily_logs/
 git commit -m "day04: offline PID simulation framework and test scenarios"
