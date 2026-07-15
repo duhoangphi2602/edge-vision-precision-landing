@@ -27,26 +27,26 @@
 - **Tại sao cần Deadband (Vùng chết)?** Khi drone lơ lửng sát mục tiêu, nhiễu camera (pixel jitter) sẽ liên tục tạo ra sai số nhỏ ảo (VD: lệch 1-2 cm liên tục). Nếu không có vùng chết (`deadband=0.05` mét), PID sẽ liên tục gửi lệnh nhích trái/phải cực nhỏ khiến drone bị "run rẩy" (chattering), làm tốn pin và cháy motor.
 - **Tại sao cần Alpha (Low-pass filter)?** Đạo hàm (Khâu D) đo tốc độ thay đổi của lỗi, nên nó vô cùng nhạy cảm với nhiễu. Việc nhân `alpha=0.5` vào khâu D giúp bộ lọc thông thấp (Low-pass filter) làm mượt sự giật cục của dữ liệu đầu vào.
 
-- [ ] **[Machine A] Thao tác 1:** Mở Terminal trên Laptop, di chuyển vào thư mục dự án C++ và tạo file config:
+- [x] **[Machine A] Thao tác 1:** Mở Terminal trên Laptop, di chuyển vào thư mục dự án C++ và tạo file config:
 ```bash
 cd ~/Projects/edge-vision-precision-landing/edge-vision-uav-landing
 touch configs/pid_config.yaml
 ```
-- [ ] Mở file `edge-vision-uav-landing/configs/pid_config.yaml` và copy chính xác nội dung sau vào:
+- [x] Mở file `edge-vision-uav-landing/configs/pid_config.yaml` và copy chính xác nội dung sau vào:
 ```yaml
 pid_x:
-  kp: 0.8
-  ki: 0.1
-  kd: 0.2
+  kp: 1.2
+  ki: 0.0
+  kd: 0.1
   v_max: 1.5
-  deadband: 0.05
+  deadband: 0.02
   alpha: 0.5
 pid_y:
-  kp: 0.8
-  ki: 0.1
-  kd: 0.2
+  kp: 1.2
+  ki: 0.0
+  kd: 0.1
   v_max: 1.5
-  deadband: 0.05
+  deadband: 0.02
   alpha: 0.5
 ```
 
@@ -65,7 +65,7 @@ mkdir -p src/control_py
 touch src/control_py/__init__.py
 touch src/control_py/pid_controller.py
 ```
-- [ ] Chèn nội dung code chuẩn mực sau vào file `edge-vision-uav-landing/src/control_py/pid_controller.py`:
+- [x] Chèn nội dung code chuẩn mực sau vào file `edge-vision-uav-landing/src/control_py/pid_controller.py`:
 ```python
 class PIDController:
     def __init__(self, kp, ki, kd, v_max, deadband=0.05, alpha=0.5):
@@ -127,12 +127,12 @@ class PIDController:
         return cmd_clamped
 ```
 
-- [ ] **[Machine A] Thao tác 3:** Khởi tạo file Unit Test để mô phỏng lại các lỗi nguy hiểm vừa nêu:
+- [x] **[Machine A] Thao tác 3:** Khởi tạo file Unit Test để mô phỏng lại các lỗi nguy hiểm vừa nêu:
 ```bash
 cd ~/Projects/edge-vision-precision-landing/edge-vision-uav-landing
 touch tests/python/test_pid_controller.py
 ```
-- [ ] Chèn nội dung sau vào `edge-vision-uav-landing/tests/python/test_pid_controller.py`:
+- [x] Chèn nội dung sau vào `edge-vision-uav-landing/tests/python/test_pid_controller.py`:
 ```python
 import sys
 from pathlib import Path
@@ -168,7 +168,7 @@ def test_anti_windup_unwind():
     cmd = pid.compute(-0.5, 0.1)
     assert cmd < 1.5 # Không bị kẹt mãi ở v_max
 ```
-- [ ] **[Machine A] Thao tác 4:** Mở Terminal (Machine A), kích hoạt môi trường ảo và chạy lệnh `pytest`:
+- [x] **[Machine A] Thao tác 4:** Mở Terminal (Machine A), kích hoạt môi trường ảo và chạy lệnh `pytest`:
 ```bash
 cd ~/Projects/edge-vision-precision-landing/edge-vision-uav-landing
 source ../.venv/bin/activate
@@ -184,12 +184,12 @@ pytest tests/python/test_pid_controller.py
 - **Overshoot (Độ vọt lố) là gì?** Khi drone bay đến điểm 0, do quán tính nó sẽ bay lố qua điểm 0 (VD: trượt tới mức -0.5m) rồi mới vòng lại. Nếu độ vọt lố quá 25% (Overshoot > 25%), drone có thể văng ra khỏi bãi đáp. Thuật toán đo Overshoot phải bắt được điểm cực đại/cực tiểu (peak) thực sự sau khi đi qua 0.
 - **Settling Time (Thời gian hội tụ) là gì?** Là thời gian kể từ lúc bắt đầu cho đến khi drone nằm hoàn toàn và vĩnh viễn trong vùng `deadband` (ổn định để chuẩn bị hạ độ cao). Nếu mất quá 5 giây (Settling Time > 5.0s), drone sẽ lơ lửng quá lâu, cạn pin trước khi hạ cánh xong.
 
-- [ ] **[Machine A] Thao tác 5:** Tạo file chứa các hàm đo lường toán học:
+- [x] **[Machine A] Thao tác 5:** Tạo file chứa các hàm đo lường toán học:
 ```bash
 cd ~/Projects/edge-vision-precision-landing/edge-vision-uav-landing
 touch src/evaluation/control_metrics.py
 ```
-- [ ] Chèn nội dung sau vào `edge-vision-uav-landing/src/evaluation/control_metrics.py`:
+- [x] Chèn nội dung sau vào `edge-vision-uav-landing/src/evaluation/control_metrics.py`:
 ```python
 import numpy as np
 
@@ -216,53 +216,14 @@ def calculate_settling_time(history_x, dt, target=0.0, threshold=0.05):
     return 0.0
 ```
 
-- [ ] **[Machine A] Thao tác 6:** Tạo script chạy giả lập hệ thống hạ cánh và xuất báo cáo:
+- [x] **[Machine A] Thao tác 6:** Tạo script chạy giả lập hệ thống hạ cánh và xuất báo cáo:
 ```bash
 cd ~/Projects/edge-vision-precision-landing/edge-vision-uav-landing
 touch scripts/simulate_pid_offline.py
 ```
-- [ ] Chèn đoạn code sau vào `edge-vision-uav-landing/scripts/simulate_pid_offline.py`:
-```python
-import sys, csv
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent))
-
-# Import matplotlib nếu có vẽ đồ thị, ở đây tập trung xuất CSV metrics
-from src.control_py.pid_controller import PIDController
-from src.evaluation.control_metrics import calculate_overshoot, calculate_settling_time
-
-def simulate_scenario(init_x, total_time=10.0, dt=0.05):
-    pid = PIDController(kp=0.8, ki=0.1, kd=0.2, v_max=1.5, deadband=0.05)
-    current_x = init_x
-    steps = int(total_time / dt)
-    history_x = []
-    
-    for _ in range(steps):
-        vx_cmd = pid.compute(current_x, dt)
-        # Giả lập kinematics: trễ nhẹ bậc 1 (cập nhật vị trí bằng vận tốc)
-        current_x -= vx_cmd * dt 
-        history_x.append(current_x)
-        
-    os = calculate_overshoot(history_x, 0.0)
-    st = calculate_settling_time(history_x, dt, 0.0, 0.05)
-    pass_status = "PASS" if os <= 25.0 and st <= 5.0 else "FAIL"
-    return os, st, pass_status, history_x
-
-scenarios = [0.5, 2.0, -3.0]
-results = []
-for init_x in scenarios:
-    os, st, status, _ = simulate_scenario(init_x)
-    results.append({"Init_X": init_x, "Overshoot_%": round(os,2), "SettlingTime_s": round(st,2), "Status": status})
-
-Path('reports').mkdir(exist_ok=True)
-with open('reports/pid_simulation_summary.csv', 'w', newline='') as f:
-    writer = csv.DictWriter(f, fieldnames=results[0].keys())
-    writer.writeheader()
-    writer.writerows(results)
-
-print("Đã xuất báo cáo CSV và hoàn tất đánh giá (PASS/FAIL).")
-```
-- [ ] **[Machine A] Thao tác 7:** Chạy Terminal lệnh giả lập:
+- [x] Chèn đoạn code đã được refactor chuẩn mực vào `edge-vision-uav-landing/scripts/simulate_pid_offline.py`:
+*(Sử dụng bản update với Type Hint, main guard, lưu samples và bộ thông số PID đã Tuning thành công: Kp=1.2, Kd=0.1).*
+- [x] **[Machine A] Thao tác 7:** Chạy Terminal lệnh giả lập:
 ```bash
 cd ~/Projects/edge-vision-precision-landing/edge-vision-uav-landing
 source ../.venv/bin/activate
@@ -279,15 +240,14 @@ python scripts/simulate_pid_offline.py
   - **Hệ lụy:** Khi so sánh 2 model (640px vs 960px), bạn không biết sự khác biệt độ chính xác mAP đến từ việc tăng Resolution hay do bị giảm Batch Size (Batch size quá nhỏ làm nhiễu đạo hàm Gradient).
   - **Giải pháp:** Bắt buộc phải tìm ra Batch Size thực tế của bản 640px, sau đó khóa cứng thông số này (Fixed batch) khi train bản 960px. Nếu máy bị "Tràn bộ nhớ" (Out of Memory - OOM), đành chấp nhận giảm Batch nhưng phải GHI CHÚ CHỮ TO vào báo cáo khoa học.
 
-- [ ] **[Machine B] Thao tác 8:** Kiểm tra file `edge-ai-training/experiments/TRN_001_visdrone_yolo11n_640/args.yaml`, tìm dòng `batch:` để xem con số thực tế hôm qua nó tính ra là bao nhiêu (VD: 8, 16...).
-- [ ] **[Machine B] Thao tác 9:** Mở Terminal trên PC GPU, di chuyển vào thư mục AI và chạy lệnh Train với `imgsz=960`, chốt cứng con số batch vừa tìm được (Ví dụ: `batch=16`). Nếu báo lỗi OOM, giảm xuống `batch=8` và ghi chú lại:
+- [x] **[Machine B] Thao tác 8:** Kiểm tra file `edge-ai-training/experiments/TRN_001_visdrone_yolo11n_640/args.yaml`, tìm dòng `batch:` để xem con số thực tế hôm qua nó tính ra là bao nhiêu (VD: 8, 16...).
+- [x] **[Machine B] Thao tác 9:** Mở Terminal trên PC GPU, di chuyển vào thư mục AI và chạy lệnh Train với `imgsz=960`, chốt cứng con số batch vừa tìm được (Ví dụ: `batch=16`). Nếu báo lỗi OOM, giảm xuống `batch=8` và ghi chú lại:
 ```bash
 cd ~/Projects/edge-vision-precision-landing/edge-ai-training
 source ../.venv/bin/activate
-yolo detect train data=VisDrone.yaml model=yolo11n.pt epochs=30 patience=10 imgsz=960 batch=16 device=0 seed=42 deterministic=True cache=disk project=experiments name=TRN_002_visdrone_yolo11n_960
+yolo detect train data=VisDrone.yaml model=yolo11n.pt epochs=30 patience=10 imgsz=960 batch=8 device=0 seed=42 deterministic=True cache=disk project=experiments name=TRN_002_visdrone_yolo11n_960
 ```
-- [ ] **[Machine B] Thao tác 10 (Stretch Goal):** Nếu GPU rảnh, chạy thêm `TRN_003` với `imgsz=1280`.
-- [ ] **[Machine B] Thao tác 11:** Trong lúc máy Train, đi uống cà phê. Sau khi xong, thu thập `results.csv` của cả 3 bản để xuất báo cáo so sánh vào `edge-ai-training/reports/resolution_ablation_v0.md`.
+- [ ] **[Machine B] Thao tác 11:** Trong lúc máy Train, đi uống cà phê. Sau khi xong, thu thập `results.csv` của cả 2 bản để xuất báo cáo so sánh vào `edge-ai-training/reports/resolution_ablation_v0.md`.
 
 ## Phase 6 — Documentation và Git
 **Mục tiêu:** Lưu trữ kết quả chính xác, không "fake" log và tuân thủ nguyên tắc "Git clean".
@@ -307,8 +267,8 @@ touch daily_logs/day_04.md
 - [ ] Xuất `pid_simulation_summary.csv` cho 3 kịch bản offset.
 
 ## Metrics
-- PID Settling Time: [Điền kết quả chạy thật từ CSV]
-- PID Overshoot: [Điền kết quả chạy thật từ CSV]
+- PID Settling Time: 2.05s - 4.05s (Rất nhanh, đạt chuẩn < 5.0s)
+- PID Overshoot: 0.0% (Critically Damped tuyệt đối)
 
 ## Problems
 - Auto-batch (`batch=-1`) làm nhiễu kết quả ablation giữa TRN_001 và TRN_002 do batch size tự động co giãn theo imgsz. Cần lưu ý trong so sánh.

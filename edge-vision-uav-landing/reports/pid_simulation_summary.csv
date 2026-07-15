@@ -1,0 +1,4 @@
+Init_X,Final_X,FinalAbsError,Overshoot_%,SettlingTime_s,Status
+0.5,0.0195,0.0195,0.0,2.05,PASS
+2.0,0.0193,0.0193,0.0,3.4,PASS
+-3.0,-0.0197,0.0197,0.0,4.05,PASS

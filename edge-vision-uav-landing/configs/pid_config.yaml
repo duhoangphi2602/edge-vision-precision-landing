@@ -1,0 +1,14 @@
+pid_x:
+  kp: 1.2
+  ki: 0.0
+  kd: 0.1
+  v_max: 1.5
+  deadband: 0.02
+  alpha: 0.5
+pid_y:
+  kp: 1.2
+  ki: 0.0
+  kd: 0.1
+  v_max: 1.5
+  deadband: 0.02
+  alpha: 0.5
