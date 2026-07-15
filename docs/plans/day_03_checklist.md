@@ -258,7 +258,7 @@ yolo detect train data=VisDrone.yaml model=yolo11n.pt epochs=30 patience=10 imgs
 ## 6. Laptop (Machine A): Nhật ký & Code Commit
 **Mục tiêu:** Ghi log ngày làm việc thứ 3 và commit code (Đảm bảo phản ánh ĐÚNG thực tế).
 
-- [ ] Tạo và chèn nội dung vào file `edge-vision-uav-landing/daily_logs/day_03.md`:
+- [x] Tạo và chèn nội dung vào file `edge-vision-uav-landing/daily_logs/day_03.md`:
 ```md
 # Day 03: Camera calibration + Pose estimation
 
@@ -289,7 +289,7 @@ yolo detect train data=VisDrone.yaml model=yolo11n.pt epochs=30 patience=10 imgs
 - PC GPU (Machine B): Tiếp tục dataset audit/baseline (nếu EXP_001 chưa xong) HOẶC bắt đầu baseline evaluation/error analysis (nếu EXP_001 đã xong).
 ```
 
-- [ ] **Commit lên Git (Kiểm tra kĩ trước khi đẩy)**:
+- [x] **Commit lên Git (Kiểm tra kĩ trước khi đẩy)**:
 ```bash
 cd ~/Projects/edge-vision-precision-landing
 git status
@@ -299,12 +299,12 @@ git commit -m "day03: add pose estimation and UAV dataset training plan"
 ```
 
 ## 7. Nghiệm thu Day 3 (Acceptance)
-- [ ] Pose functional test pass.
-- [ ] Camera/pose report không đưa claim chưa được đo.
-- [ ] CUDA/environment verification pass.
-- [ ] COCO8 smoke test pass.
-- [ ] Dataset source/license được ghi.
-- [ ] Dataset audit artifact tồn tại.
-- [ ] Nếu EXP_001 đã chạy: tồn tại `best.pt`, `results.csv`, curves, notes.
-- [ ] Daily log phản ánh đúng kết quả thực tế.
-- [ ] Git status không chứa dataset/checkpoint lớn ngoài ý muốn.
+- [x] Pose functional test pass.
+- [x] Camera/pose report không đưa claim chưa được đo.
+- [x] CUDA/environment verification pass.
+- [x] COCO8 smoke test pass.
+- [x] Dataset source/license được ghi.
+- [x] Dataset audit artifact tồn tại.
+- [x] Nếu EXP_001 đã chạy: tồn tại `best.pt`, `results.csv`, curves, notes.
+- [x] Daily log phản ánh đúng kết quả thực tế.
+- [x] Git status không chứa dataset/checkpoint lớn ngoài ý muốn.
