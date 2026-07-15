@@ -1,0 +1,18 @@
+{
+  "datasets": [
+    {
+      "id": "visdrone2019-det",
+      "name": "VisDrone 2019 Object Detection",
+      "version": "1.0",
+      "source": "Ultralytics (VisDrone.yaml)",
+      "purpose": "Domain adaptation for UAV perspective",
+      "split_strategy": "Sử dụng split mặc định của tập dữ liệu (train/val/test).",
+      "expected_metrics": {
+        "mAP50": "> 0.40",
+        "mAP50-95": "> 0.25",
+        "fps_target_nano": "> 15"
+      },
+      "classes_of_interest": [3, 4, 5, 8]
+    }
+  ]
+}
