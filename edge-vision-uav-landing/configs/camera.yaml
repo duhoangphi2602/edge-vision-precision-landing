@@ -1,0 +1,11 @@
+camera_name: "webcam_default"
+image_width: 640
+image_height: 480
+# Camera matrix: [fx, 0, cx; 0, fy, cy; 0, 0, 1]
+# Giả sử góc nhìn (FOV) ~60 độ cho webcam tiêu chuẩn
+camera_matrix:
+  - [554.25, 0.0, 320.0]
+  - [0.0, 554.25, 240.0]
+  - [0.0, 0.0, 1.0]
+# Distortion coefficients (k1, k2, p1, p2, k3)
+dist_coeffs: [0.0, 0.0, 0.0, 0.0, 0.0]

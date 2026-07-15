@@ -21,16 +21,58 @@ Gimbal-Aware Video Stabilization & Tracking Quality Analyzer
 
 ## 3. Các lựa chọn kỹ thuật chính
 
-- Precision Landing core: AprilTag/ArUco + camera pose/target error.
-- AI extension: YOLO target tracking + ONNX/OpenVINO edge benchmark.
-- Control layer: C++ PID + failsafe + MAVLink.
-- Perception layer: Python OpenCV/YOLO/ONNX.
-- Communication: Python perception → C++ control qua UDP/TCP/Unix socket.
-- MAVLink messages: LANDING_TARGET và SET_POSITION_TARGET_LOCAL_NED.
-- Simulation: PX4/Gazebo SITL hoặc hybrid replay-SITL nếu camera bridge mất thời gian.
-- Hardware constraint: cpulimit, Docker CPU/memory limit, stress test.
+## 3. Các lựa chọn kỹ thuật chính và Operational Modes
 
-LANDING_TARGET là MAVLink message dùng để gửi vị trí target từ vision/positioning system tới autopilot, với broadcast rate khuyến nghị ban đầu khoảng 10–50 Hz tùy tốc độ landing và độ chính xác mong muốn. SET_POSITION_TARGET_LOCAL_NED dùng để gửi setpoint vị trí/vận tốc/gia tốc trong local NED frame, phù hợp khi bạn tự tính velocity command bằng PID. PX4 Offboard cần stream setpoint liên tục; tài liệu PX4 v1.12 ghi setpoints phải được stream >2 Hz trước và trong khi dùng Offboard mode.
+Roadmap định nghĩa rõ project có hai operational mode khác nhau. YOLO vehicle tracking là extension, không thay thế precision landing core. Không dùng vehicle bounding box như một `LANDING_TARGET` nếu không có thiết kế và kiểm chứng phù hợp. Không claim autonomous pursuit hoặc landing lên phương tiện chuyển động. Phần ML không được làm chậm các deliverable bắt buộc (C++ PID, failsafe, IPC, control timing, robustness tests, SITL/replay integration).
+
+### Mode A — Precision Landing Core (Bắt buộc)
+```text
+Camera / Replay / Gazebo
+→ ArUco hoặc AprilTag
+→ Pixel error / pose estimation
+→ PID centering
+→ State machine
+→ Failsafe
+→ LANDING_TARGET hoặc velocity setpoint
+```
+
+### Mode B — AI Vehicle Tracking Extension
+```text
+UAV-domain video
+→ YOLO detector
+→ Target selection
+→ Tracker
+→ Center error / tracking metrics
+→ Optional simulated target-centering
+```
+
+### Mission Class Mapping v1
+Primary mission group: `ground_vehicle`. Included trong v0.1: `car`, `van`, `truck`, `bus`. Không thuộc scope v0.1: `pedestrian`, `people`, `bicycle`, `motor`, `tricycle`, `awning-tricycle`.
+Quy tắc:
+- Public baseline có thể train trên toàn bộ 10 class gốc của VisDrone để giữ tính benchmark.
+- Target selector của project chỉ chấp nhận các class thuộc `ground_vehicle`.
+- Việc remap các class thành một class chung `vehicle` là một experiment riêng. Không trộn metric.
+- Artifact: `edge-ai-training/datasets/manifests/CLASS_MAPPING.md`.
+
+### Dataset Strategy
+Hệ thống có ba tầng dataset rõ ràng:
+- **Tier 0 — Smoke test**: Dùng `coco8.yaml`. Chỉ 1–3 epochs. Experiment name bắt đầu bằng `SMOKE_`. Không dùng metric trong portfolio.
+- **Tier 1 — Public UAV-domain baseline**: Ưu tiên VisDrone2019-DET cho detection, UAVDT hoặc VisDrone-VID cho tracking. Baseline portfolio bắt buộc dùng UAV-domain dataset.
+- **Tier 2 — Project-specific adaptation set**: 300–800 frame từ tối thiểu 5–10 sequence. Yêu cầu source, license, annotation guideline, review, sequence-based split, held-out test sequences. Chất lượng và độ đa dạng quan trọng hơn số lượng 300 frame.
+
+### Optimization Objective và Pareto Selection
+Trước mỗi optimization experiment phải ghi: Mục tiêu, Baseline, Biến được thay đổi, Biến giữ nguyên, Hard constraints, Expected metric, Stop condition.
+Hard constraints ban đầu:
+- Batch size inference = 1.
+- CPU FPS tối thiểu ≥ 10. Stretch goal ≥ 15 FPS.
+- P95 latency ≤ 150 ms.
+- Không làm control/failsafe nghẽn.
+- Model export được sang runtime mục tiêu và Memory phù hợp deployment machine.
+
+Không chọn model chỉ dựa vào mAP. Trong các model vượt hard constraints, ưu tiên: (1) Ground-vehicle recall, (2) AP small, (3) Target-lock rate, (4) P95 latency, (5) Model size, (6) mAP50-95.
+Tạo `reports/model_selection_matrix.csv` và `reports/model_selection_decision.md`.
+
+- Hardware constraint: cpulimit, Docker CPU/memory limit, stress test.
 
 ## 4. Chuẩn đầu ra sau 30 ngày
 
@@ -87,18 +129,55 @@ gimbal-video-stabilization-analyzer/
 └── videos/
 ```
 
+### ML Support Workspace cần có
+Quy tắc: `raw/` là immutable. Mọi conversion phải chạy lại được bằng script. Không commit dataset hoặc checkpoint lớn vào Git (DVC/Git LFS là should-have). Commit manifest, scripts, configs, metric nhỏ và report.
+```text
+edge-ai-training/
+├── datasets/
+│   ├── raw/
+│   │   ├── visdrone/
+│   │   ├── uavdt/
+│   │   └── custom_sources/
+│   ├── interim/
+│   ├── processed/
+│   │   └── uav_vehicle_v1/
+│   └── manifests/
+│       ├── DATASET_SOURCES.md
+│       ├── DATASET_MANIFEST.json
+│       ├── CLASS_MAPPING.md
+│       ├── ANNOTATION_GUIDELINES.md
+│       └── SPLIT_MANIFEST.csv
+├── experiments/
+│   ├── EXPERIMENT_REGISTRY.csv
+│   └── EXPERIMENT_TEMPLATE.md
+├── scripts/
+│   ├── download_dataset.py
+│   ├── extract_video_frames.py
+│   ├── convert_annotations.py
+│   ├── remap_vehicle_classes.py
+│   ├── split_by_sequence.py
+│   ├── audit_dataset.py
+│   ├── detect_duplicates.py
+│   └── visualize_labels.py
+├── reports/
+└── models/
+```
+
 ## 5. Chỉ số mục tiêu sau 30 ngày
 
 | Nhóm | Metric | Mục tiêu thực tế trong 30 ngày |
 |---|---|---|
-| Precision landing / centering | Final error | ≤ 50 cm trong mô phỏng hoặc ≤ 30 px nếu chỉ pixel-loop |
+| Precision landing / centering | Final error (Pixel-loop) | ≤ 30 px nếu chỉ pixel-loop |
+| Precision landing / centering | Final error (Metric Sim) | ≤ 50 cm trong mô phỏng |
+| Precision landing / centering | Final error (Real-camera) | Yêu cầu calib thật (nếu có) |
 | Control | Overshoot | ≤ 25% |
 | Control | Settling time | ≤ 5–8 s |
+| Robustness | Target-loss threshold | Khoảng thời gian trước khi hệ thống quyết định target đã mất |
+| Robustness | Failsafe reaction latency | Thời gian từ lúc threshold bị vượt đến khi safe state được kích hoạt (≤ 200ms) |
 | Robustness | Recovery after 1s occlusion | ≤ 2 s |
-| Edge inference | YOLO ONNX CPU FPS | ≥ 10–15 FPS |
+| Edge inference | YOLO ONNX CPU FPS | Minimum target: ≥ 10 FPS. Stretch goal: ≥ 15 FPS |
 | Edge inference | P95 latency | ≤ 100–150 ms |
 | C++ control | Control loop rate | 30–50 Hz ổn định |
-| C++ control | Failsafe reaction | ≤ 200 ms sau timeout |
 | Resource constraint | CPU-limited mode | Perception giảm FPS nhưng control/failsafe không chết |
 | Stabilization project | Jitter reduction | ≥ 30% |
 | Stabilization project | Tracking lost rate reduction | ≥ 20% |
@@ -107,10 +186,9 @@ Ultralytics hỗ trợ export YOLO sang ONNX/OpenVINO/TensorRT và nhiều forma
 
 ## 6. Phân vai 2 máy
 
-### Laptop — vai trò “System Engineer”
+### Laptop — vai trò “System Engineer” & “Deployment Target”
 
 Laptop tập trung vào:
-
 - PX4/Gazebo/SITL
 - OpenCV camera/replay pipeline
 - ArUco/AprilTag detection
@@ -122,29 +200,29 @@ Laptop tập trung vào:
 - Docker
 - Technical documents
 - Final demo video
+- **Edge Deployment Benchmark**: Là target chính cho ONNX Runtime CPU, OpenVINO CPU, Thread count, Batch size 1, P50/P95 latency, FPS, Peak RAM, CPU utilization, Startup time, Concurrent perception + control test. Không dùng benchmark CPU trên PC GPU làm bằng chứng duy nhất cho edge deployment trên laptop.
 
 ### PC GPU — vai trò “ML Engineer”
 
 PC GPU tập trung vào:
-
-- Dataset UAV / VisDrone / custom subset
+- Dataset UAV / VisDrone / custom subset (Evaluation)
 - YOLO training
 - Data augmentation
-- Evaluation: mAP, precision, recall
-- Export ONNX
-- Benchmark PyTorch vs ONNX Runtime vs OpenVINO
-- Batch evaluation
+- Accuracy metrics (mAP, precision, recall)
+- Export ONNX / OpenVINO
+- Batch processing / Sanity-check ONNX
 - Generate plots / reports
 - Overnight training 24/24
 
+Mọi report ML/Benchmark phải ghi rõ: Machine, CPU, GPU, RAM, OS, Runtime, Precision, Thread count, Input size.
+
 ## 7. Quy tắc vận hành mỗi ngày
 
-Mỗi ngày phải có 4 output nhỏ:
-
-1. Code commit
-2. Log hoặc metric mới
-3. Một file note trong daily_logs/day_xx.md
-4. Quyết định ngày mai dựa trên lỗi hôm nay
+Mỗi ngày phải có tối thiểu:
+1. Một meaningful commit (code, test, dataset manifest, report, documentation, config). Không tạo commit rỗng chỉ để đạt checklist.
+2. Một log hoặc bằng chứng mới.
+3. Một file note trong `daily_logs/day_xx.md`
+4. Quyết định ngày mai dựa trên lỗi/tiến độ hôm nay.
 
 ### Template daily_logs/day_XX.md
 
@@ -173,6 +251,24 @@ Mỗi ngày phải có 4 output nhỏ:
 ```
 
 Quy tắc rất quan trọng: Không có metric thì xem như chưa chứng minh được.
+
+### 7.1. Quy tắc Agent Bắt buộc (Agent Rules)
+1. Agent **KHÔNG ĐƯỢC** dùng `coco8.yaml`, `coco128.yaml` hoặc dataset demo khác làm portfolio baseline. Dataset demo chỉ được dùng cho smoke test và experiment name phải có `SMOKE_`.
+2. Trước mọi training task, agent phải chỉ ra: project mission, target classes, dataset source, license/citation, split strategy, expected metrics, và experiment ID.
+3. Nếu chưa có dataset phù hợp, agent phải tạo task tìm nguồn, tải, convert, extract, annotate, review, audit và versioning.
+4. Agent không được random split các frame từ cùng một video nếu điều đó gây leakage.
+5. Agent không được đánh dấu training hoàn thành nếu chưa lưu: command, config, seed, metrics, curves, best.pt và notes. Phải lưu failure cases và viết nguyên nhân.
+6. Ưu tiên dữ liệu liên quan đúng UAV viewpoint hơn dataset lớn nhưng sai domain. Mọi claim trong README phải khớp với dữ liệu và test.
+7. Agent KHÔNG tự ý chạy toàn bộ quy trình Optimization trong một ngày mà phải phân bổ theo dependency.
+8. Ghi log phải phản ánh đúng thực tế, không được viết các claim chưa được xác minh (ví dụ: metric chưa đo). Không ghi latency nếu chưa có phương pháp đo.
+9. Không gọi model là optimized nếu chưa có baseline comparison. Không chọn model chỉ dựa vào mAP.
+10. Không thay đổi nhiều biến chính trong một ablation mà không giải thích.
+11. Không dùng test set để tune threshold, augmentation hoặc hyperparameter. Không đưa failure samples trực tiếp từ test vào train.
+12. Không chạy INT8 nếu chưa có representative calibration set. Không xem một seed là bằng chứng final.
+13. Không gọi model final trước runtime/system validation.
+14. Không commit raw dataset, checkpoint và experiment artifact lớn bằng `git add .`. Luôn chạy `git status` trước commit.
+15. Mọi claim phải có metric, protocol, environment, artifact hoặc report.
+16. Không để ML optimization làm chậm core UAV/system deliverables. Không claim hardware accuracy từ synthetic calibration. Không claim full PX4 closed-loop nếu chỉ mới có message builder.
 
 ## 8. Tuần 1 — Foundation, perception baseline, control offline
 
@@ -261,7 +357,8 @@ Tạo workspace ML:
 ```bash
 mkdir edge-ai-training
 cd edge-ai-training
-mkdir -p datasets models experiments logs scripts reports
+mkdir -p datasets/raw datasets/interim datasets/processed datasets/manifests
+mkdir -p experiments scripts reports models
 nvidia-smi
 python3 -c "import torch; print(torch.cuda.is_available())"
 ```
@@ -304,25 +401,17 @@ Yêu cầu code:
 
 OpenCV ArUco pose estimation dùng marker coordinate system và camera coordinate system; pose được biểu diễn bằng rotation và translation vector.
 
-#### PC GPU
+#### PC GPU: ML environment và dataset discovery
 
-Chuẩn bị YOLO baseline:
-
-- Cài Ultralytics
-- Tải một subset nhỏ dataset UAV hoặc chuẩn bị video tự quay
-- Tạo dataset.yaml
-- Train thử YOLO nano/small trên subset nhỏ
-
-Lệnh mẫu:
-
-```bash
-yolo detect train model=yolo11n.pt data=dataset.yaml imgsz=640 epochs=10 batch=16
-```
+- Cài/kiểm tra Ultralytics, CUDA. Ghi lại version GPU driver, CUDA, PyTorch, Ultralytics.
+- Khảo sát UAV datasets (VisDrone, UAVDT). Ghi rõ nguồn, license, annotation format, class list, split.
+- Tạo `datasets/manifests/DATASET_SOURCES.md` và `experiments/EXP_PLAN.md`.
+- Chỉ chạy smoke test nếu cần kiểm tra môi trường. KHÔNG train portfolio baseline trước khi xác định được dataset source, split và experiment plan.
 
 #### Deliverable
 
 - Laptop: video marker detection overlay, CSV log detection
-- PC GPU: YOLO baseline training chạy được, metrics sơ bộ
+- PC GPU: Môi trường ML được xác minh, DATASET_SOURCES.md và EXP_PLAN.md.
 
 ### Day 3 — Camera calibration + pose estimation
 
@@ -342,6 +431,7 @@ Yêu cầu:
 - Estimate marker pose:
   - translation vector tvec
   - rotation vector rvec
+- Viết Unit test cho Coordinate Transform (Camera frame -> Body frame)
 - Convert tvec sang relative x/y/z error
 - So sánh pixel error vs metric error
 
@@ -352,18 +442,19 @@ Calibration có thể làm theo 2 hướng:
 
 #### PC GPU
 
-Training baseline v0.1:
+UAV-domain YOLO Baseline v0.1:
 
-- Train YOLO model v0.1
-- Lưu best.pt
-- Lưu results.csv
-- Lưu confusion matrix nếu có
+- **Task A — GPU verification**: nvidia-smi, yolo checks, version report.
+- **Task B — Smoke test**: Chạy `SMOKE_coco8_yolo11n` (1 epoch, imgsz=640).
+- **Task C — Dataset manifest & Registry**: Tạo/cập nhật `DATASET_SOURCES.md`, `DATASET_MANIFEST.json`, `CLASS_MAPPING.md`, `EXP_PLAN.md`, `EXPERIMENT_REGISTRY.csv`.
+- **Task D — Dataset acquisition và audit**: Tải VisDrone. Kiểm tra image-label pairing, corrupted images, invalid boxes, class stats. Ghi known limitations. (Chưa hoàn thành task này nếu chỉ tải xong).
+- **Task E — Baseline train**: (Chỉ chạy khi đủ điều kiện) `TRN_001_visdrone_yolo11n_640`. Có thể carry over nếu không đủ thời gian.
 
 #### Deliverable
 
-- pose_estimator.py chạy được
-- calibration_report.md có thông số camera
-- YOLO baseline v0.1
+- pose_estimator.py chạy được.
+- calibration_report.md có thông số camera. (Ghi rõ synthetic calibration chỉ kiểm tra phần mềm, không chứng minh metric accuracy thực tế).
+- GPU verification report, Dataset Manifest, Audit draft, và Smoke test pass.
 
 ### Day 4 — PID visual servoing offline
 
@@ -396,21 +487,18 @@ Metrics cần tính:
 
 #### PC GPU
 
-Chạy 2 experiment:
-
-- EXP-001: YOLO nano, imgsz=416
-- EXP-002: YOLO nano, imgsz=640
-
-Mục tiêu:
-
-- So sánh accuracy vs speed
-- Ghi lại model size
+- Đánh giá `TRN_001_visdrone_yolo11n_640` Baseline.
+- Thực hiện Resolution ablation. Mỗi resolution là một experiment riêng:
+  - `TRN_002_visdrone_yolo11n_960`
+  - `TRN_003_visdrone_yolo11n_1280` (nếu có đủ tài nguyên)
+- Chỉ đổi image size. Giữ nguyên: Dataset, Split, Model, Seed, Augmentation, Epoch policy.
+- Đánh giá: mAP50, mAP50-95, AP small, Vehicle recall, VRAM, Training time.
 
 #### Deliverable
 
 - PID offline simulation plot
 - tests/python/test_pid_controller.py pass
-- EXP-001/EXP-002 log
+- Log của `TRN_001`, `TRN_002`, `TRN_003`.
 
 ### Day 5 — Replay mode + fault injection v0.1
 
@@ -437,24 +525,17 @@ Log thêm:
 
 #### PC GPU
 
-Tạo evaluation script:
-
-- scripts/eval_yolo.py
-- reports/yolo_v0_1_report.md
-
-Output:
-
-- precision
-- recall
-- mAP@50
-- mAP@50:95 nếu có
-- confusion matrix
+Thực hiện Error Analysis và Dataset Audit:
+- Tạo `reports/yolo_v0_1_report.md`.
+- Tạo thư mục `reports/error_analysis/`. Phân tích: false positive, false negative, tiny object, occlusion, motion blur, crowded scene, domain gap, negative sequences.
+- Tạo `reports/dataset_audit_before_cleaning.md`, `dataset_audit_after_cleaning.md`, và `dataset_cleaning_delta.csv`.
+- Ghi chú: Không dùng test set để tune model hoặc thêm trực tiếp test failures vào train.
 
 #### Deliverable
 
 - Replay test chạy bằng config
 - Fault injection hoạt động
-- YOLO report v0.1
+- Error analysis report và Dataset audit delta.
 
 ### Day 6 — PX4/Gazebo/SITL setup
 
@@ -475,16 +556,12 @@ Tạo:
 
 #### PC GPU
 
-Chạy overnight training:
-
-- YOLO v0.2 với augmentation nhẹ
-- Lưu logs
-
-#### Deliverable
-
-- PX4/Gazebo chạy được hoặc có lỗi được ghi rõ
-- SITL_SETUP.md
-- YOLO v0.2 training job đang chạy
+Lên kế hoạch custom dataset workflow (Tier 2):
+- Chọn nguồn dữ liệu (video tự quay hoặc opensource). Ghi nhận license.
+- Tạo annotation guideline rõ ràng.
+- Extract frame có kiểm soát. Label thử (pilot annotation) 50-100 frame.
+- Review pilot annotation.
+- Tạo nhóm Hard-negative/hard-example pool.
 
 ### Day 7 — Gate 1: Foundation review
 
@@ -499,20 +576,29 @@ Dọn repo:
 
 #### PC GPU
 
-- Chọn model YOLO tốt nhất hiện tại
-- Export ONNX thử
-
-Ultralytics export hỗ trợ Python API như model.export(format="onnx") và nhiều option như imgsz, dynamic, simplify, opset.
+- Sửa annotation guideline sau review.
+- Tiếp tục annotation custom dataset.
+- Audit pilot set.
+- Chọn week-1 provisional model candidate (Chưa gọi model là final, chưa chạy multi-seed).
 
 #### Gate 1 phải đạt
 
-- [ ] ArUco/AprilTag detection chạy được
-- [ ] Pixel error tính đúng
-- [ ] Pose estimation có bản đầu
-- [ ] PID offline chạy được
-- [ ] Replay + fault injection chạy được
-- [ ] PX4/Gazebo ít nhất khởi động được
-- [ ] YOLO baseline có model + log
+### System
+- Marker detection.
+- Pixel error.
+- Pose estimator functional test.
+- PID offline chạy.
+- Replay + fault injection hoạt động.
+- PX4/Gazebo hoặc fallback rõ ràng.
+
+### ML/Data
+- COCO8 chỉ dùng làm smoke test.
+- Đã ghi rõ Dataset source/license/citation.
+- Class mapping hoàn tất.
+- Dataset manifest.
+- Audit report bước đầu.
+- UAV-domain baseline (`TRN_001`) đã chạy hoặc có trạng thái carry-over rõ.
+- Lưu trữ command/config/seed/log. Có Failure samples bước đầu.
 
 ## 9. Tuần 2 — Closed-loop, MAVLink concept, YOLO/ONNX baseline
 
@@ -538,25 +624,9 @@ Tạo:
 - src/interface_cpp/mavlink_message_design.md
 - src/control_py/state_machine.py
 - docs/MAVLINK_DESIGN.md
+- docs/COORDINATE_FRAME_CONTRACT.md (Định nghĩa OpenCV frame, Body frame, Local NED, Dấu X/Y/Z, Transform path. Bắt buộc trước khi tích hợp).
 
-MAVLINK_DESIGN.md phải có 2 mode:
-
-- Mode 1: LANDING_TARGET
-  - Purpose: Vision system acts like external landing target sensor.
-  - Sends target position to autopilot.
-  - Fields to study:
-    - time_usec
-    - target_num
-    - frame
-    - angle_x / angle_y
-    - distance
-    - x, y, z
-    - q
-    - type
-    - position_valid
-- Mode 2: SET_POSITION_TARGET_LOCAL_NED
-  - Purpose: External controller computes velocity setpoint.
-  - Sends vx/vy/vz/yaw_rate command to autopilot.
+MAVLINK_DESIGN.md phải có 2 mode (angle-only / metric position / velocity setpoint). Không trộn LANDING_TARGET rate với PX4 Offboard proof-of-life rate.
 
 State machine:
 
@@ -566,14 +636,17 @@ SEARCH -> TRACK -> APPROACH -> DESCEND -> LAND -> ABORT/HOVER
 
 #### PC GPU
 
-- Train YOLO v0.3 với augmentation: blur, brightness, scale, mosaic nếu phù hợp
-- Lưu config experiment
+Tiếp tục custom dataset workflow:
+- Tiếp tục custom dataset annotation.
+- Split theo sequence (đảm bảo không leakage).
+- Chạy duplicate/leakage check.
+- Freeze dataset version khi quality gate pass.
 
 #### Deliverable
 
-- MAVLINK_DESIGN.md
+- MAVLINK_DESIGN.md và COORDINATE_FRAME_CONTRACT.md
 - state machine chạy được bằng test giả lập
-- YOLO v0.3 training job
+- Custom dataset đã được freeze.
 
 ### Day 9 — Closed-loop 2D simulation
 
@@ -585,33 +658,17 @@ Tạo:
 - scripts/run_2d_landing_sim.py
 - reports/closed_loop_2d_v0.md
 
-Simulation đơn giản:
-
-- State: drone_x, drone_y, target_x, target_y, velocity_x, velocity_y
-- Controller: PID(error_x, error_y)
-- Disturbance: wind_x, wind_y, delay_ms
-- Metrics:
-  - final_error
-  - max_error
-  - overshoot
-  - settling_time
-  - time_to_center
-  - command_saturation_ratio
-
 #### PC GPU
 
-Benchmark ban đầu:
-
-- PyTorch inference FPS
-- ONNX Runtime inference FPS
-- Latency P50/P95
-
-ONNX Runtime có thể cải thiện inference nhờ graph optimizations và hardware-specific execution providers.
+- Hoàn thiện custom dataset.
+- Chạy public-to-custom fine-tuning (`FT_001_public_to_custom`).
+- So sánh before/after (Baseline `TRN_001` vs `FT_001`).
+- Chuẩn bị tracking evaluation protocol.
 
 #### Deliverable
 
 - closed_loop_2d_v0.md có plot error over time
-- benchmark_pytorch_vs_onnx_v0.csv
+- Fine-tune evidence report.
 
 ### Day 10 — Python perception → control observation schema
 
@@ -623,42 +680,53 @@ Tạo schema chung:
 - src/ipc/udp_sender.py
 - src/ipc/udp_receiver_stub.py
 
-Message format:
+Message format phải tuân theo COORDINATE_FRAME_CONTRACT:
 
 ```json
 {
-  "timestamp_ns": 0,
+  "schema_version": 1,
+  "sequence_id": 0,
+  "frame_id": 0,
+  "capture_timestamp_ns": 0,
+  "publish_timestamp_ns": 0,
   "source": "aruco|apriltag|yolo",
+  "measurement_type": "pixel|angle|metric_pose",
+  "coordinate_frame": "camera_optical",
   "detected": true,
   "target_id": 1,
   "confidence": 0.98,
   "u": 320.0,
   "v": 240.0,
-  "error_x": 0.0,
-  "error_y": 0.0,
+  "error_x_px": 0.0,
+  "error_y_px": 0.0,
   "x_m": 0.12,
   "y_m": -0.05,
   "z_m": 1.8,
-  "latency_ms": 18.5
+  "metric_position_valid": true,
+  "angle_x_rad": 0.0,
+  "angle_y_rad": 0.0,
+  "angle_valid": false,
+  "stale_after_ms": 200
 }
 ```
 
 Yêu cầu:
 
 - Perception gửi observation qua UDP localhost
-- Receiver đọc và in latency
-- Log dropped message count
+- Receiver đọc và in latency. Dropped message tính theo `sequence_id`.
+- Không sử dụng metric pose nếu `metric_position_valid=false`.
 
 #### PC GPU
 
-- Chạy YOLO tracking trên video UAV hoặc video test
-- Log target ID, center, confidence
+Chuẩn bị Tracking Evaluation Protocol:
+- Chọn held-out sequences (không leakage): 3 easy, 3 medium, 3 hard.
+- Xác định metric (ID switches, target-lock rate, v.v.).
+- (Chưa đánh giá tracker nếu tracker chưa tồn tại).
 
 #### Deliverable
 
 - UDP IPC prototype
 - ipc_latency_log.csv
-- YOLO tracking overlay video
 
 ### Day 11 — Precision landing run v0.1
 
@@ -680,15 +748,17 @@ Tạo:
 
 #### PC GPU
 
-- Export best model sang ONNX
-- Test dynamic/static input
-- Test imgsz 416 vs 640
+Benchmark `BENCH_001_onnx_cpu_threads`:
+- Export model sang ONNX (`best.onnx`).
+- Test dynamic/static input. Test imgsz 416 vs 640.
+- Đo PyTorch FPS vs ONNX Runtime FPS. Đo P50/P95 latency, Peak Memory.
+- Chạy benchmark trên Laptop (Deployment target), PC GPU chỉ hỗ trợ export và sanity check.
 
 #### Deliverable
 
 - 20 run landing simulation
 - bảng final error / overshoot / settling time
-- best.onnx đầu tiên
+- benchmark_runtime_v0.csv đầu tiên.
 
 ### Day 12 — Robustness v0.1 + CPU constraint
 
@@ -761,18 +831,14 @@ Target selection logic:
 
 #### PC GPU
 
-Benchmark:
-
-- PyTorch
-- ONNX Runtime
-- OpenVINO nếu máy/laptop hỗ trợ
-
-OpenVINO phù hợp để benchmark hướng CPU/AI PC/edge device vì tài liệu chính thức mô tả nó như toolkit deploy high-performance AI trên AI PCs, edge devices và Physical AI.
+Evaluate Tracker (`TRACK_001_bytetrack_heldout`):
+- Chạy evaluation protocol trên PC GPU để đo đạc metrics.
+- So sánh các thuật toán ByteTrack vs BoT-SORT offline.
 
 #### Deliverable
 
 - yolo_tracking mode chạy được
-- benchmark_runtime_v0.csv
+- log tracker ban đầu.
 - video YOLO target tracking
 
 ### Day 14 — Gate 2: Integration review
@@ -787,20 +853,23 @@ Tạo:
 
 #### PC GPU
 
-- Đóng băng model candidate v0.3
-- Lưu best.pt, best.onnx
-- Lưu training config
+Chạy Tracking Evaluation:
+- Tối thiểu 3 easy, 3 medium, 3 hard sequences.
+- Tính: ID continuity, ID switches, track fragmentation, target-lock rate, lost-target duration, recovery time, center jitter, FPS, P50/P95 latency.
+- Giữ cả success và failure videos.
+- Model candidate ở giai đoạn này gọi là "ML candidate v0.1" (Không chạy multi-seed final ở đây).
 
 #### Gate 2 phải đạt
 
-- [ ] Landing/centering closed-loop simulation chạy được
-- [ ] State machine có bản đầu
-- [ ] MAVLink message design rõ
-- [ ] IPC Python → receiver chạy được
-- [ ] Robustness test v0.1 có kết quả
-- [ ] CPU-limited baseline có số liệu
-- [ ] YOLO tracking mode chạy được
-- [ ] ONNX benchmark có số liệu
+- Closed-loop 2D simulation chạy được.
+- State machine có bản đầu.
+- IPC prototype chạy được.
+- Robustness v0.1 có kết quả.
+- UAV-domain detector và Custom adaptation dataset rõ trạng thái.
+- Public-only vs fine-tuned comparison.
+- Tracking trên held-out sequences (Target-lock/recovery metrics).
+- ONNX benchmark bước đầu. Domain-gap report.
+- ML Candidate v0.1 (Chưa gọi final).
 
 ## 10. Tuần 3 — C++ control, MAVLink bridge, IPC, project phụ CV
 
@@ -874,7 +943,7 @@ target_link_libraries(test_pid_controller control_lib)
 
 #### PC GPU
 
-- Chạy final training candidate nếu model chưa ổn
+- Chạy training cho candidate v0.1 nếu model chưa ổn
 - Nếu model đã ổn, chuyển sang batch evaluation
 
 #### Deliverable
@@ -937,7 +1006,7 @@ Generate YOLO metrics report:
 
 - C++ PID pass tests
 - control_cpp benchmark: update time per call
-- YOLO final metrics draft
+- YOLO metrics draft v0.1
 
 ### Day 17 — C++ failsafe manager + state machine
 
@@ -973,7 +1042,7 @@ Failsafe rules:
 
 #### PC GPU
 
-- Export ONNX final
+- Export ONNX v0.1
 - Export OpenVINO nếu có thể
 - Tạo model card bản đầu
 
@@ -1010,13 +1079,7 @@ MAVLink common message set là nơi định nghĩa các message chuẩn nên dù
 
 #### PC GPU
 
-Benchmark ONNX Runtime:
-
-- threads=1
-- threads=2
-- threads=4
-- imgsz=416
-- imgsz=640
+Export models cho Edge Benchmark (ONNX, OpenVINO). Laptop sẽ chạy script benchmark với cấu hình thực tế (threads=1,2,4, imgsz). PC GPU chuẩn bị test scripts `eval_onnx.py`.
 
 #### Deliverable
 
@@ -1047,8 +1110,8 @@ Metrics:
 
 #### PC GPU
 
-- Batch chạy benchmark PyTorch/ONNX/OpenVINO
-- Generate plots
+- Tiếp nhận kết quả benchmark CSV từ Laptop.
+- Generate plots (FPS vs Latency, Resource constraints).
 
 #### Deliverable
 
@@ -1091,13 +1154,15 @@ Cần chứng minh:
 
 #### PC GPU
 
-- Không train thêm nếu không cần
-- Tập trung export charts và finalize ML report
+- Lựa chọn Release Candidate.
+- Chạy Multi-seed validation (3 seeds) trên mô hình Release Candidate. Đóng băng training.
+- Chuẩn bị Export ONNX INT8 quantization nếu có tập calibration đại diện.
 
 #### Deliverable
 
 - ab_test_python_vs_cpp_control.md
 - cpu_limited_stress_report.md
+- Kết quả Multi-seed validation.
 
 ### Day 21 — Project phụ CV: video stabilization v0.1 + Gate 3
 
@@ -1208,13 +1273,15 @@ Metrics output:
 
 #### PC GPU
 
-- Xuất final ML metrics
-- Đóng băng model: best.pt, best.onnx, openvino_model/
+- Export các file model cuối cùng (`best.pt`, `best.onnx`).
+- Viết final ML metrics report (trung bình của 3 seeds).
+- Generate biểu đồ FPS vs mAP (Pareto front) cho Technical Design.
+- Cấm train thêm model mới từ thời điểm này.
 
 #### Deliverable
 
 - robustness_report_v1.md
-- final model artifacts
+- final model artifacts và ML metrics.
 
 ### Day 23 — Technical Design Document deep write
 
@@ -1300,8 +1367,9 @@ Bảng bắt buộc:
 
 #### PC GPU
 
-- Cập nhật MODEL_CARD.md
-- Cập nhật DATASET_MANIFEST.md
+- Hoàn thiện Model Card (`MODEL_CARD.md`).
+- Hoàn thiện Dataset Manifest (`DATASET_MANIFEST.md`).
+- Backup tất cả artifacts liên quan đến Release Candidate.
 
 #### Deliverable
 
@@ -1450,12 +1518,13 @@ Tạo INTERVIEW_NOTES.md:
 
 #### PC GPU
 
-- Không train nữa
-- Chỉ sửa chart/report/model card
+- Hỗ trợ Review System metrics trên Laptop.
+- Không train nữa.
+- Chỉ sửa chart/report/model card.
 
 #### Deliverable
 
-- README.md gần final
+- README.md Release Candidate 1
 - INTERVIEW_NOTES.md
 
 ### Day 29 — Clean clone test
@@ -1544,56 +1613,40 @@ Tạo PORTFOLIO_SUMMARY.md:
 ## 12. Quality Gates tổng hợp
 
 ### Gate 1 — Day 7
-
 Goal: Có perception + PID + replay baseline.
-
 Pass:
-
-- Detect marker
-- Tính target error
-- PID offline chạy
-- Replay + noise/blur/occlusion hoạt động
-- YOLO baseline có model
+- Detect marker và tính error.
+- PID offline chạy.
+- Replay + noise/blur/occlusion hoạt động.
+- PX4/Gazebo hoặc fallback rõ ràng.
+- ML: COCO8 smoke test, manifest draft, VisDrone baseline train (`TRN_001`) bắt đầu/xong. Dataset license/nguồn được verify.
 
 ### Gate 2 — Day 14
-
-Goal: Có closed-loop simulation + YOLO/ONNX baseline.
-
+Goal: Có closed-loop simulation + Tracking v0.1.
 Pass:
-
-- Landing/centering simulation chạy
-- State machine có bản đầu
-- Robustness v0.1 có kết quả
-- YOLO tracking chạy
-- ONNX benchmark có số liệu
+- Landing/centering simulation chạy.
+- State machine + IPC prototype chạy.
+- Robustness v0.1 có kết quả.
+- ML: Domain-gap report, Public vs Finetuned, ONNX benchmark bước đầu, Tracking metrics trên held-out set. Có ML Candidate v0.1.
 
 ### Gate 3 — Day 21
-
-Goal: Không còn là Python-only demo.
-
+Goal: Không còn là Python-only demo. Có C++ control path.
 Pass:
-
-- C++ PID
-- C++ failsafe
-- C++ MAVLink bridge/message builder
-- Python → C++ IPC
-- CPU-limited stress test
-- A/B Python-only vs hybrid
-- Project phụ stabilization v0.1
+- C++ PID, C++ failsafe, C++ MAVLink bridge (chưa cần send thực).
+- Python → C++ IPC chạy được.
+- CPU-limited stress test (Python vs Hybrid C++).
+- ML: Hoàn tất Release Candidate. Chuẩn bị Multi-seed validation.
+- CV Project 2: Có pipeline đầu tiên.
 
 ### Gate 4 — Day 30
-
-Goal: Portfolio product.
-
+Goal: Portfolio product release-ready.
 Pass:
-
-- Chạy được từ clean clone
-- Có report
-- Có metrics
-- Có video
-- Có limitations
-- Có Docker/scripts
-- Có 2 project liên quan UAV/CV/Edge
+- Chạy được từ clean clone (cả system test và evaluation).
+- Có report (RESULTS, TECH DESIGN), metrics, video demo.
+- Có limitation chân thực.
+- Có Docker/scripts.
+- Cả 2 project liên quan UAV/CV/Edge hoàn tất artifacts.
+- Minh chứng đủ 5 core competencies (AI/CV, Edge AI, UAV/Robotics, Embedded/C++, Product engineering).
 
 ## 13. Fallback plan để không vỡ tiến độ
 
@@ -1661,14 +1714,9 @@ C++ control/failsafe quan trọng hơn full MAVLink send thật trong 30 ngày.
   - Lưu metrics
   - Quyết định keep/drop
 
-### Experiment naming
+### Naming & Lưu trữ
 
-- EXP_001_yolo_n_416_baseline
-- EXP_002_yolo_n_640_baseline
-- EXP_003_yolo_n_640_aug_blur_noise
-- EXP_004_yolo_s_640_aug
-- EXP_005_onnx_cpu_threads
-- EXP_006_openvino_cpu
+- Các thử nghiệm sử dụng prefix như `SMOKE_`, `TRN_`, `FT_`, `BENCH_`, `TRACK_`, `SYS_`.
 
 ### File cần lưu mỗi experiment
 
