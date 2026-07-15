@@ -10,7 +10,8 @@ models/*.pt
 models/*.onnx
 models/*.engine
 models/openvino_model/
-edge-ai-training/datasets/
+edge-ai-training/datasets/*
+!edge-ai-training/datasets/manifests/
 edge-ai-training/models/
 *.avi
 *.mp4
@@ -21,6 +22,6 @@ edge-ai-training/models/
 .vscode/settings.json
 pyrightconfig.json
 edge-vision-uav-landing/pyrightconfig.json
-edge-ai-training/runs/
+runs/
 **/*.pt
 .vscode/
