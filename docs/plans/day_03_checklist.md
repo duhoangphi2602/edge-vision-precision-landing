@@ -227,7 +227,7 @@ yolo detect train data=coco8.yaml model=yolo11n.pt epochs=1 imgsz=640 batch=4 de
 *(Lưu ý: Không dùng metric vào portfolio, không gọi weight này là baseline).*
 
 ### Task 5C — Dataset source và experiment plan
-- [ ] **Khởi tạo thư mục Dataset Manifest & Audit**
+- [x] **Khởi tạo thư mục Dataset Manifest & Audit**
 ```bash
 mkdir -p datasets/manifests experiments
 touch datasets/manifests/DATASET_SOURCES.md
@@ -238,7 +238,7 @@ touch experiments/EXPERIMENT_REGISTRY.csv
 *(Yêu cầu tối thiểu: Dataset name, source, license, mission target, classes, split strategy, expected metrics).*
 
 ### Task 5D — Dataset acquisition và audit
-- [ ] **Tạo báo cáo audit (Chờ tải xong VisDrone)**
+- [x] **Tạo báo cáo audit (Chờ tải xong VisDrone)**
 ```bash
 mkdir -p reports/label_samples
 touch reports/dataset_audit_visdrone_v1.md
@@ -246,14 +246,14 @@ touch reports/dataset_audit_visdrone_v1.md
 *(Yêu cầu check: image-label pairing, corrupted images, invalid boxes, class distribution. Không đánh dấu hoàn thành nếu chỉ mới tải xong bộ dataset).*
 
 ### Task 5E — Train baseline thật
-- [ ] **Train baseline UAV-domain v0.1**
+- [x] **Train baseline UAV-domain v0.1**
 ```bash
-yolo detect train data=VisDrone.yaml model=yolo11n.pt epochs=30 patience=10 imgsz=640 batch=-1 device=0 seed=42 deterministic=True cache=disk project=experiments name=EXP_001_visdrone_yolo11n_640_baseline
+yolo detect train data=VisDrone.yaml model=yolo11n.pt epochs=30 patience=10 imgsz=640 batch=-1 device=0 seed=42 deterministic=True cache=disk project=experiments name=TRN_001_visdrone_yolo11n_640
 ```
 *(Lưu ý fallback: Nếu thiếu VRAM dùng batch nhỏ hơn, thiếu RAM tắt cache. Đây là baseline, chưa phải final optimized model).*
 
 ### Task 5F — Evidence và quality gate
-- [ ] Xác nhận đã lưu đủ Artifacts của EXP_001 (`args.yaml`, `results.csv`, `best.pt`, `COMMAND.txt`, `NOTES.md`, failure cases). Mới được tính là hoàn thành Task 5.
+- [x] Xác nhận đã lưu đủ Artifacts của EXP_001 (`args.yaml`, `results.csv`, `best.pt`, `COMMAND.txt`, `NOTES.md`, failure cases). Mới được tính là hoàn thành Task 5.
 
 ## 6. Laptop (Machine A): Nhật ký & Code Commit
 **Mục tiêu:** Ghi log ngày làm việc thứ 3 và commit code (Đảm bảo phản ánh ĐÚNG thực tế).
