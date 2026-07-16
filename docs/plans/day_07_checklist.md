@@ -55,11 +55,11 @@
 - **Lý do (💡 Giải thích chuyên sâu):** Viết báo cáo giúp rà soát toàn bộ các criterion. Trạng thái `PASS_WITH_DOCUMENTED_LIMITATION` là công cụ mạnh mẽ trong kỹ thuật hệ thống để đi tiếp mà không giấu giếm rủi ro kỹ thuật.
 - **Dependency:** Số liệu từ Task 1.1.
 - **Thao tác (Manual Execution):**
-  - [ ] **Thao tác 1:** Tạo file báo cáo:
+  - [x] **Thao tác 1:** Tạo file báo cáo:
     ```bash
     touch edge-vision-uav-landing/docs/WEEK1_REPORT.md
     ```
-  - [ ] **Thao tác 2:** Copy TOÀN BỘ nội dung sau vào `edge-vision-uav-landing/docs/WEEK1_REPORT.md`:
+  - [x] **Thao tác 2:** Copy TOÀN BỘ nội dung sau vào `edge-vision-uav-landing/docs/WEEK1_REPORT.md`:
     ```markdown
     # Gate 1 Foundation Review & Week 1 Report
 
@@ -99,12 +99,12 @@
 - **Lý do (💡 Giải thích chuyên sâu):** "Sequence-based train/val/held-out split". Trong video UAV, các frame liên tiếp rất giống nhau. Nếu chia ngẫu nhiên (random split), frame tập test sẽ gần như y hệt tập train, gây ra "data leakage". Bắt buộc phải chia dữ liệu theo Sequence (đoạn video khác nhau).
 - **Dependency:** `EXPERIMENT_REGISTRY.csv`.
 - **Thao tác (Manual Execution):**
-  - [ ] **Thao tác 1:** Tạo file Dataset Manifest:
+  - [x] **Thao tác 1:** Tạo file Dataset Manifest:
     ```bash
     mkdir -p edge-ai-training/docs
     touch edge-ai-training/docs/DATASET_MANIFEST.md
     ```
-  - [ ] **Thao tác 2:** Copy và dán đoạn code sau vào `edge-ai-training/docs/DATASET_MANIFEST.md`:
+  - [x] **Thao tác 2:** Copy và dán đoạn code sau vào `edge-ai-training/docs/DATASET_MANIFEST.md`:
     ```markdown
     # Dataset Manifest (v0.1 Plan)
     
@@ -144,11 +144,11 @@
 - **Lý do (💡 Giải thích chuyên sâu):** Daily Log là bằng chứng kiểm toán quá trình phát triển (auditing), giúp truy vết lại "vào ngày này chúng ta đã chốt phương án nào".
 - **Dependency:** Báo cáo Gate 1.
 - **Thao tác (Manual Execution):**
-  - [ ] **Thao tác 1:** Tạo file log mới:
+  - [x] **Thao tác 1:** Tạo file log mới:
     ```bash
     touch edge-vision-uav-landing/daily_logs/day_07.md
     ```
-  - [ ] **Thao tác 2:** Copy và dán toàn bộ đoạn sau vào `edge-vision-uav-landing/daily_logs/day_07.md`:
+  - [x] **Thao tác 2:** Copy và dán toàn bộ đoạn sau vào `edge-vision-uav-landing/daily_logs/day_07.md`:
     ```markdown
     # Day 07: Gate 1 Foundation Review & Dataset v0.1 Plan
 
@@ -163,7 +163,7 @@
     ## Next Action
     - Chuyển sang Day 08: Thiết kế MAVLink và viết Python Reference State Machine.
     ```
-  - [ ] **Thao tác 3:** Commit tất cả thay đổi:
+  - [x] **Thao tác 3:** Commit tất cả thay đổi:
     ```bash
     git add edge-vision-uav-landing/docs/ edge-ai-training/docs/ edge-vision-uav-landing/daily_logs/
     git commit -m "docs: finalize Gate 1 foundation review and dataset v0.1 plan for Day 07"
