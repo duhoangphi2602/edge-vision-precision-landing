@@ -1,0 +1,19 @@
+mission_id: P1_A_FIXED_ARUCO_LANDING
+marker_type: aruco
+marker_dictionary: DICT_4X4_50
+marker_id: 0
+marker_size_m: 0.20
+landing_pad_size_m: 0.60
+landing_pad_motion: fixed
+camera_orientation: downward_facing
+gazebo_model_name: landing_pad_aruco_id0
+world_frame: world
+landing_pad_position_m:
+  x: 0.0
+  y: 0.0
+  z: 0.0
+failsafe:
+  stale_observation_threshold_ms: 200
+network:
+  udp_ip: "127.0.0.1"
+  udp_port: 5005
