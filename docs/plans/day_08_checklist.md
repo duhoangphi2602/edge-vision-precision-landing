@@ -225,7 +225,7 @@ cat edge-vision-uav-landing/reports/state_machine_test_output.log
 - **Trạng thái hiện tại:** PENDING_VALIDATION.
 - **File liên quan:** `edge-ai-training/docs/DATASET_MANIFEST.md`.
 - **Các bước thao tác:**
-  - [ ] **Thao tác 1:** Mở file `DATASET_MANIFEST.md` và thêm nội dung phần Audit:
+  - [x] **Thao tác 1:** Mở file `DATASET_MANIFEST.md` và thêm nội dung phần Audit:
     *(Do dataset thực tế uav_vehicle_custom_v0_1 có thể chưa được record đầy đủ, ta ghi nhận trạng thái realistic)*
 ```bash
 echo -e "\n## 5. Audit & Freeze v0.1\n- **Status:** PARTIALLY_COLLECTED (Pending full 300-800 frames).\n- **Action:** Trì hoãn việc training Custom Tier 2 cho đến khi dataset đủ số lượng sequence. Tạm thời sử dụng VisDrone baseline." >> edge-ai-training/docs/DATASET_MANIFEST.md
@@ -266,11 +266,11 @@ tail -n 5 edge-ai-training/docs/DATASET_MANIFEST.md
 
 ### End-of-Day Log Template
 Tạo file log ghi nhận tiến độ:
-  - [ ] **Thao tác 1:**
+  - [x] **Thao tác 1:**
 ```bash
 touch edge-vision-uav-landing/daily_logs/day_08.md
 ```
-  - [ ] **Thao tác 2:** Copy nội dung:
+  - [x] **Thao tác 2:** Copy nội dung:
 
 ```markdown
 # Day 08: MAVLink Design, Landing State Machine & Dataset Freeze
@@ -300,7 +300,7 @@ P1-A, ML
 ```
 
 ### Git Commit Guidance
-  - [ ] **Thao tác 1:** Commit các file an toàn:
+  - [x] **Thao tác 1:** Commit các file an toàn:
 ```bash
 git add edge-vision-uav-landing/docs/MAVLINK_DESIGN.md edge-vision-uav-landing/src/control_py/landing_state_machine.py edge-vision-uav-landing/test_landing_state_machine.py edge-vision-uav-landing/reports/state_machine_test_output.log edge-vision-uav-landing/daily_logs/day_08.md edge-ai-training/docs/DATASET_MANIFEST.md
 git commit -m "feat: implement Day 08 state machine, MAVLink design and audit dataset"

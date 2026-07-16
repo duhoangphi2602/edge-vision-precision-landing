@@ -17,3 +17,7 @@
 ## 4. Sequence Inventory (Audit v0.1)
 - Đang thống kê số lượng video clip cụ thể trong VisDrone...
 - Kế hoạch: Xây dựng tool lọc các sequence có độ cao và góc quay tương đương với yêu cầu Mission P1-B.
+
+## 5. Audit & Freeze v0.1
+- **Status:** PARTIALLY_COLLECTED (Pending full 300-800 frames).
+- **Action:** Trì hoãn việc training Custom Tier 2 cho đến khi dataset đủ số lượng sequence. Tạm thời sử dụng VisDrone baseline.
