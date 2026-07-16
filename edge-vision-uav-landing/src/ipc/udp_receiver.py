@@ -3,43 +3,48 @@ import json
 import time
 
 class UDPReceiver:
-    def __init__(self, ip="127.0.0.1", port=5005, stale_threshold_ms=200):
+    def __init__(self, ip="127.0.0.1", port=5000, stale_threshold_s=0.2):
         self.ip = ip
         self.port = port
-        self.stale_threshold_ms = stale_threshold_ms
+        self.stale_threshold_ns = int(stale_threshold_s * 1e9)
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind((self.ip, self.port))
-        self.sock.settimeout(0.5) # timeout tránh block hoàn toàn
+        self.sock.setblocking(False)
+        self.last_seq = -1
 
-    def receive_latest(self):
+    def get_latest_observation(self):
         latest_data = None
-        try:
-            # Rút cạn buffer để luôn lấy gói tin mới nhất (Drop gói cũ nếu kẹt)
-            while True:
-                data, _ = self.sock.recvfrom(4096)
+        # Drain the buffer for latest observation (bounded queue behavior essentially dropping older packets in OS buffer)
+        while True:
+            try:
+                data, addr = self.sock.recvfrom(4096)
                 latest_data = data
-        except socket.timeout:
-            pass
-        except BlockingIOError:
-            pass
-
-        if latest_data:
-            obs = json.loads(latest_data.decode('utf-8'))
-            current_ns = time.time_ns()
-            latency_ms = (current_ns - obs.get("timestamp_capture_ns", current_ns)) / 1e6
+            except BlockingIOError:
+                break
+            except Exception as e:
+                break
+        
+        if not latest_data:
+            return None, "NO_DATA"
             
-            if latency_ms > self.stale_threshold_ms:
-                print(f"[FAILSAFE] Dữ liệu quá cũ ({latency_ms:.1f}ms > {self.stale_threshold_ms}ms)")
-                return None
-            return obs
-        return None
-
-if __name__ == "__main__":
-    receiver = UDPReceiver()
-    receiver.sock.setblocking(False)
-    print("Đang chờ UDP data ở port 5005...")
-    while True:
-        obs = receiver.receive_latest()
-        if obs:
-            print(f"Nhận observation hợp lệ! Normalized Error: {obs['normalized_error']}")
-        time.sleep(0.02) # 50Hz control loop logic
+        try:
+            obs = json.loads(latest_data.decode('utf-8'))
+        except json.JSONDecodeError:
+            return None, "MALFORMED"
+            
+        if "schema_version" not in obs or "sequence_id" not in obs:
+            return None, "MALFORMED"
+            
+        # Out of order check
+        if obs["sequence_id"] <= self.last_seq:
+            return None, "OUT_OF_ORDER"
+            
+        self.last_seq = obs["sequence_id"]
+        
+        # Stale check
+        now_ns = time.time_ns()
+        publish_time = obs.get("timestamp_publish_ns", 0)
+        if (now_ns - publish_time) > self.stale_threshold_ns:
+            return obs, "STALE"
+            
+        return obs, "VALID"

@@ -1,0 +1,3 @@
+metric,value_ms
+P50_latency,0.009
+P95_latency,0.015
