@@ -1,156 +1,135 @@
-# Day 03 closeout / Day 04 readiness
+# End-of-Day Cleanup Review
 
 ## 1. Review Context
 
-- Next scheduled ROADMAP day: DAY_04
-- Day determination status: Ready for DAY_04 (Day 03 tasks are completed. Day 04 is the next scheduled day, not yet executed.)
+- Current ROADMAP day: DAY_04
+- Day determination status: Confirmed DAY_04
 - Workspace root: `/home/hoangphi/Projects/edge-vision-precision-landing`
-- Review date/time: 2026-07-15
+- Review date/time: 2026-07-16T06:25:27+07:00
 - Review mode: Review Mode
 
 ## 2. Sources Read
-- `ROADMAP.md`
-- `docs/plans/day_02_checklist.md`
-- `docs/plans/day_03_checklist.md`
-- `docs/plans/day_03_execution_plan.md`
-- `edge-vision-uav-landing/daily_logs/day_03.md`
-- `docs/reviews/current_project_progress_snapshot.md`
-- `docs/reviews/roadmap_alignment_review.md`
-- `edge-ai-training/experiments/EXPERIMENT_REGISTRY.csv`
-- `edge-ai-training/reports/dataset_audit_visdrone_v1.md`
-- `edge-ai-training/datasets/manifests/DATASET_SOURCES.md`
-- `edge-ai-training/datasets/manifests/DATASET_MANIFEST.json`
-- `edge-vision-uav-landing/reports/calibration_report.md`
+- ROADMAP.md
+- docs/plans/day_04_checklist.md
+- docs/plans/next_action_plan.md
+- edge-vision-uav-landing/daily_logs/day_04.md
+- edge-ai-training/reports/resolution_ablation_v0.md
 
 ## 3. Source-of-Truth and Patch Alignment
-- Không phát hiện file patch (`ROADMAP_*_PATCH.md`) nào trong workspace. `ROADMAP.md` hiện tại là source-of-truth duy nhất.
+- **ROADMAP.md**: Read and used as the primary source of truth.
+- **ROADMAP_DATASET_REALISM_PATCH.md**: Exists. Status: Partially merged / Needs review.
+- **ROADMAP_OPTIMIZATION_EVIDENCE_EXTENSION.md**: Exists. Status: Partially merged / Needs review.
 
 ## 4. Workspace Scan Summary
-- Project 1 (`edge-vision-uav-landing`): Đã có cấu trúc `src/perception`, `src/estimation`, `configs`, `scripts`, `reports`.
-- Project 2 (`gimbal-video-stabilization-analyzer`): Status: Not scheduled yet.
-- Support Workspace (`edge-ai-training`): Đã có dataset manifests, experiments (`TRN_001`), reports.
+- `edge-vision-uav-landing/`: Has `configs`, `src/control_py`, `tests/python`, `scripts`, `reports`, `daily_logs`.
+- `edge-ai-training/`: Has `experiments/` (with `TRN_001` and `TRN_002`), `reports/` (with ablation and audit reports).
 
 ## 5. Progress Summary
 
-### Next Scheduled Day: DAY_04
-Chưa có plan/checklist cho DAY_04 (Ready to plan).
+### Current Day: DAY_04
 
 ### Previous 2 Days Reviewed
-Day 02 và Day 03.
+- Day 03 (Baseline YOLO training, Dataset manifest)
+- Day 04 (PID Visual Servoing Offline, Resolution Ablation)
 
 ### Completed With Evidence
-- Môi trường và cấu trúc thư mục.
-- Camera calibration (synthetic): `camera_calibration.py`, `pose_estimator.py`, `calibration_report.md`.
-- Dataset manifest & audit v1: `DATASET_SOURCES.md`, `DATASET_MANIFEST.json`, `dataset_audit_visdrone_v1.md`.
-- SMOKE_coco8_yolo11n test: Được lưu trong `EXPERIMENT_REGISTRY.csv`.
+- **PID Visual Servoing Offline**: `pid_controller.py`, `simulate_pid_offline.py` exist. Metrics output to `pid_simulation_summary.csv`.
+- **Resolution Ablation**: Experiment `TRN_002_visdrone_yolo11n_960` exists. `resolution_ablation_v0.md` details the mAP50 comparison between 640px and 960px.
 
 ### Completed But Evidence Incomplete
-- UAV-Domain YOLO Baseline v0.1 (`TRN_001`): Checklist says completed, but evidence is incomplete. Thư mục `TRN_001_visdrone_yolo11n_640` có `best.pt`, `args.yaml`, `results.csv` nhưng thiếu `COMMAND.txt`, `NOTES.md` và failure cases theo yêu cầu của acceptance criteria Day 3.
+- None identified.
 
 ### Pending Items
-- Bổ sung evidence/artifact cho `TRN_001` (`COMMAND.txt`, `NOTES.md`).
-- Task Day 4: PID visual servoing offline.
+- **Replay Mode**: Scheduled for Day 05.
+- **Fault Injection**: Scheduled for Day 05.
+- **Tracking Integration**: Scheduled for Day 05.
 
 ### Blocked / Needs Confirmation
-- Không có.
+- None currently.
 
 ## 6. Scheduled Deliverables and Quality Gate Check
-**Day 3 Quality Gate:**
-- [x] Pose functional test pass: Verified
-- [x] Camera/pose report không đưa claim chưa được đo: Verified
-- [x] CUDA/environment verification pass: Verified
-- [x] COCO8 smoke test pass: Verified
-- [x] Dataset source/license được ghi: Verified
-- [x] Dataset audit artifact tồn tại: Verified (`dataset_audit_visdrone_v1.md`)
-- [ ] Nếu EXP_001 đã chạy: tồn tại `best.pt`, `results.csv`, curves, notes: Partially verified. (Có `best.pt`, `results.csv`, `args.yaml` nhưng thiếu curves image, `COMMAND.txt`, `NOTES.md`, failure cases. Tuy nhiên, `results.csv` đủ chứng minh metric cơ bản).
-- [x] Daily log phản ánh đúng kết quả thực tế: Verified.
-- [ ] Git status không chứa dataset/checkpoint lớn ngoài ý muốn: Chưa đánh giá pass (Cần người dùng tự kiểm tra bằng Git status vì chưa có evidence local git snapshot).
+- **Gate 1 (Foundation Review)**: Scheduled for Day 07. Status: Not scheduled yet.
+- **Day 04 Deliverables**: PID simulation output, test passes, ablation logs. Status: Verified.
 
 ## 7. Dataset and Split Integrity
-- Dataset manifest: Verified (`DATASET_MANIFEST.json`, `DATASET_SOURCES.md`).
-- Audit report: Present (`dataset_audit_visdrone_v1.md`).
-- Split integrity: Chưa đánh giá pass (Chưa có bằng chứng sequence split cho custom dataset).
+- **VisDrone Dataset**: Audit report exists (`dataset_audit_visdrone_v1.md`).
+- Status: Dataset present, evidence verified for Tier 1 baseline.
 
 ## 8. Experiment and Evidence Integrity
-- `SMOKE_coco8_yolo11n`: Complete and reproducible (Smoke test lưu log cơ bản).
-- `TRN_001_visdrone_yolo11n_640`: Training completed, evidence incomplete (Thiếu command notes và curves, tuy nhiên `results.csv` chứng minh được metric ở mức cơ bản). Registry present.
+- `TRN_001_visdrone_yolo11n_640`: Present.
+- `TRN_002_visdrone_yolo11n_960`: Present.
+- Registry: `EXPERIMENT_REGISTRY.csv` exists.
+- Ablation Report: `resolution_ablation_v0.md` clearly documents metrics and batch size constraints.
+- Status: Complete and reproducible.
 
 ## 9. Smoke Test vs Portfolio Baseline Check
-- Smoke test COCO8 được phân tách rõ ràng với prefix `SMOKE_` trong `EXPERIMENT_REGISTRY.csv`.
-- Portfolio baseline `TRN_001` sử dụng VisDrone (UAV-domain). Tuân thủ nguyên tắc Roadmap.
+- `TRN_001` and `TRN_002` use VisDrone (UAV-domain dataset), which acts correctly as a Portfolio Baseline.
+- No confusion with COCO8 smoke tests observed in active reporting.
 
 ## 10. Claim-to-Evidence Check
-- Claim: `TRN_001` đạt mAP50 = 27.3%, mAP50-95 = 15.3% (trong `day_03.md`). Evidence: Có file `results.csv` chứng minh metric ở mức cơ bản, tuy nhiên cần xuất plot curves để evidence đầy đủ hơn.
-- Claim: Pose estimation functional test PASS. Evidence: Có `calibration_report.md` giải thích rõ synthetic intrinsics.
+- **Claim**: PID Settling Time < 5.0s, Overshoot 0.0%. 
+  - **Evidence**: `pid_simulation_summary.csv` and Day 04 log. Verified.
+- **Claim**: Resolution increase gives +10.5% mAP50 gain.
+  - **Evidence**: `resolution_ablation_v0.md` compares `TRN_001` and `TRN_002`. Verified.
 
 ## 11. Files To Keep
 - `ROADMAP.md`
-- `ENVIRONMENT_CONTEXT.md`
 - `AGENT_PACK_COMBINED.md`
-- Các file checklist/plan trong `docs/plans/`
-- Các log trong `edge-vision-uav-landing/daily_logs/`
-- `edge-ai-training/experiments/EXPERIMENT_REGISTRY.csv`
-- Các file dataset manifest và audit
-- Tất cả file mã nguồn trong `src/`, `configs/`, `scripts/`
+- `ENVIRONMENT_CONTEXT.md`
+- `requirements.txt`
+- `docs/plans/day_04_checklist.md`
+- `edge-vision-uav-landing/daily_logs/day_04.md`
+- `edge-ai-training/reports/resolution_ablation_v0.md`
+- `edge-vision-uav-landing/reports/pid_simulation_summary.csv`
+- All source code in `src/`, `tests/`, `scripts/`, `configs/`.
 
 ## 12. Files To Update, Not Duplicate
-- `docs/reviews/current_project_progress_snapshot.md`
-- `docs/reviews/roadmap_alignment_review.md`
+- `docs/plans/next_action_plan.md`
+- `edge-ai-training/experiments/EXPERIMENT_REGISTRY.csv`
 
 ## 13. Duplicate / Merge Candidates
-- Không phát hiện file trùng lặp.
+- None identified.
 
 ## 14. Patch / Archive Candidates
-- Không có patch file.
+- `ROADMAP_DATASET_REALISM_PATCH.md`: Needs user confirmation before archive.
+- `ROADMAP_OPTIMIZATION_EVIDENCE_EXTENSION.md`: Needs user confirmation before archive.
 
 ## 15. Cleanup Candidates
-- Không có file rác/nháp rõ ràng lúc này.
+- None identified.
 
 ## 16. Generated / Cache Files
-- Các thư mục `__pycache__` nếu có trong hệ thống thư mục Python.
+- `__pycache__/`
+- `.pytest_cache/`
+- `runs/` (Ensure any relevant YOLO runs are properly moved to the `experiments/` directory)
 
 ## 17. Large Files / Do Not Commit
-- `edge-ai-training/experiments/TRN_001_visdrone_yolo11n_640/best.pt` (5.45 MB): Checkpoint không nên commit trực tiếp vào git.
-- Khuyến cáo sử dụng hoặc cập nhật `.gitignore` để tránh commit nhầm `*.pt`.
+- Checkpoint files (`*.pt`, `*.onnx`) in `edge-ai-training/experiments/`. Do not commit these to git.
 
 ## 18. Daily Log Check
-- `day_03.md`: Exists. Đã có mục Done, Metrics, Problems, Decision, Next. Phản ánh đúng thực tế.
-- `day_04.md`: Not scheduled yet.
+- `edge-vision-uav-landing/daily_logs/day_04.md`: Exists, completed with accurate metrics and problems noted.
 
 ## 19. Next Action Plan Check
-- `docs/plans/next_action_plan.md`: Missing next_action_plan.md. Nên tạo kế hoạch cho Day 04.
+- `docs/plans/next_action_plan.md`: Exists, targets Day 05 (Replay Mode, Fault Injection, Tracking Integration), matches roadmap.
 
 ## 20. Git Safety Check
-Không chạy Git. Người dùng nên tự chạy:
-```bash
-git status
-git status --short
-git ls-files | grep -E "\.pt$|\.pth$|\.onnx$|\.engine$|\.mp4$|\.avi$|\.mkv$|\.bag$|\.zip$|\.tar$|\.tar\.gz$"
-```
+- Ensure large model checkpoints or raw datasets are not added to git.
 
 ## 21. Recommended Manual Cleanup Commands
-> [!CAUTION]
-> Các lệnh sau thay đổi cấu hình Git và xóa file. Vui lòng thêm `--dry-run` hoặc kiểm tra kĩ (ví dụ: mở file `.gitignore` để kiểm tra thay vì tự động append) trước khi thực thi.
-
 ```bash
-# Kiểm tra kĩ .gitignore trước khi thêm
-grep -q "\.pt" .gitignore || echo "*.pt" >> .gitignore
-
-# Chỉ dry-run để kiểm tra nếu checkpoint đang bị track nhầm
-git rm --cached --dry-run edge-ai-training/experiments/TRN_001_visdrone_yolo11n_640/best.pt
-
-# Xác minh thư mục __pycache__ trước khi xóa
+git status --short
 find . -name "__pycache__" -type d
-# Cẩn thận khi chạy lệnh rm thực tế:
-# find . -name "__pycache__" -type d -exec rm -r {} +
+find . -name ".pytest_cache" -type d
+git ls-files | grep -E "\.pt$|\.onnx$|\.mp4$"
 ```
 
 ## 22. Risks
-- Thiếu artifact chứng minh đầy đủ cho `TRN_001` (như COMMAND.txt, NOTES.md, failure cases). Điều này khiến model baseline thiếu evidence để chứng minh reproducibility.
-- Synthetic intrinsics chỉ phù hợp giả lập, không đại diện cho metrics thực tế.
+- Batch size discrepancy (Auto-batch) during ablation required reducing `TRN_002` batch size to 8. This is a known risk for direct comparison but is documented.
+- 960px inference is too slow for edge deployment; future work must address latency (as noted in ablation report).
 
 ## 23. What Not To Delete
-- Không xóa `best.pt` vì nó đang được `EXPERIMENT_REGISTRY.csv` và roadmap tham chiếu trực tiếp.
+- Do not delete `TRN_001` or `TRN_002` experiment folders or logs.
+- Do not delete PID test scripts.
+- Do not delete the `.venv`.
 
 ## 24. Final Review Checklist
 - [x] Đã đọc `ROADMAP.md`.

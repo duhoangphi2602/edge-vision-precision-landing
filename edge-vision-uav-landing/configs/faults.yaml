@@ -1,0 +1,17 @@
+gaussian_noise:
+  enabled: true
+  mean: 0
+  std: 15
+
+motion_blur:
+  enabled: false
+  kernel_size: 15
+
+drop_frame:
+  enabled: true
+  drop_probability: 0.1 # 10% cơ hội rớt frame
+
+occlusion:
+  enabled: true
+  box_w: 50
+  box_h: 50

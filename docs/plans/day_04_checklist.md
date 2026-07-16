@@ -252,7 +252,7 @@ yolo detect train data=VisDrone.yaml model=yolo11n.pt epochs=30 patience=10 imgs
 ## Phase 6 — Documentation và Git
 **Mục tiêu:** Lưu trữ kết quả chính xác, không "fake" log và tuân thủ nguyên tắc "Git clean".
 
-- [ ] **[Cả 2 Machine] Điền `daily_logs/day_04.md` bằng KẾT QUẢ THẬT:**
+- [x] **[Cả 2 Machine] Điền `daily_logs/day_04.md` bằng KẾT QUẢ THẬT:**
 Chỉ tạo file log theo template và chừa trống mục Metrics/Done. Chờ cho đến khi script chạy xong mới điền. (Tuyệt đối không dùng log để tuyên bố kết quả chưa diễn ra).
 ```bash
 cd ~/Projects/edge-vision-precision-landing/edge-vision-uav-landing
@@ -262,9 +262,9 @@ touch daily_logs/day_04.md
 # Day 04: PID Visual Servoing & Resolution Ablation
 
 ## Done
-- [ ] Cài đặt PID với anti-windup (unwind), first-sample handling, reset function.
-- [ ] Hoàn thiện `control_metrics.py` đo overshoot/settling time.
-- [ ] Xuất `pid_simulation_summary.csv` cho 3 kịch bản offset.
+- [x] Cài đặt PID với anti-windup (unwind), first-sample handling, reset function.
+- [x] Hoàn thiện `control_metrics.py` đo overshoot/settling time.
+- [x] Xuất `pid_simulation_summary.csv` cho 3 kịch bản offset.
 
 ## Metrics
 - PID Settling Time: 2.05s - 4.05s (Rất nhanh, đạt chuẩn < 5.0s)

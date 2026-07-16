@@ -1,0 +1,4 @@
+frame_id,reason_for_removal,action_taken
+seq_01_frame_045.jpg,Label rác (không có phương tiện),deleted
+seq_03_frame_112.jpg,Mờ nhòe không thể nhận diện bằng mắt người,deleted
+seq_05_frame_999.jpg,Bounding box lệch ra ngoài ảnh,fixed

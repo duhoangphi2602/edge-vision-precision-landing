@@ -1,12 +1,5 @@
-# Next Action Plan: Day 05
+# Next Action Plan: Day 06
 
-## Mục tiêu (Day 05)
-1. **Replay Mode (Phát lại Video):** Tích hợp video thực tế từ drone (có kèm nhiễu thật) vào đường ống nhận diện để thay thế cho bộ ảnh tĩnh.
-2. **Fault Injection (Bơm lỗi):** Giả lập các tình huống xấu (nhòe khung hình, mất tín hiệu tạm thời, gió giật làm mờ camera) để kiểm tra sức chịu đựng của bộ điều khiển PID.
-3. **Tracking Integration:** Tích hợp bộ Tracker (ByteTrack/BoTSORT) vào để bù đắp các khung hình bị mất.
-
-## Thao tác chuẩn bị
-- [ ] Chuẩn bị video test (Flight logs/Video thực tế).
-- [ ] Viết script Replay kết nối thẳng vào `ArucoDetector` hoặc `YOLODetector`.
-- [ ] Viết module `FaultInjector` để chủ động drop frame.
-- [ ] Xác nhận PID vẫn hoạt động mượt mà (Settling Time < 5s) dưới các điều kiện khắc nghiệt.
+## Mục tiêu (Day 06)
+1. **PX4/Gazebo SITL Setup:** Cài đặt và khởi chạy PX4 SITL trên Laptop để có một vehicle giả lập.
+2. **YOLO Tracking Extension:** Áp dụng thuật toán Tracking (ByteTrack / BoTSORT) nhằm chống lại tác động của rớt mạng và che khuất vật thể (đã phát hiện ở Fault Injection Day 05).
