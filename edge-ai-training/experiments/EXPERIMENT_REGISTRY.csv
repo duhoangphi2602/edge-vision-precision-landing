@@ -1,3 +1,4 @@
 exp_id,model,imgsz,dataset,epochs,batch,purpose,status,mAP50,mAP50_95,p95_latency
 SMOKE_coco8_yolo11n,yolo11n.pt,640,coco8,1,4,Smoke test pipeline,COMPLETED,0.801,0.610,-
 TRN_001_visdrone_yolo11n_640,yolo11n.pt,640,VisDrone,30,-1,Baseline UAV domain,COMPLETED,0.273,0.153,-
+EXP_002,yolo11n.pt,640,custom_v0_1,-,-,Domain adaptation fine-tune,DEFERRED,-,-,Dataset quá nhỏ. Chỉ đánh giá public baseline.

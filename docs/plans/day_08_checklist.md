@@ -16,12 +16,12 @@
 - **Blocker / Fallback:** Chưa có SITL/MAVSDK kết nối thực tế -> Fallback: State Machine chạy độc lập và MAVLink design chỉ ở mức tài liệu.
 - **Task carry-over hợp lệ:** Chuyển MAVLink C++ implementation xuống sau, hiện tại chỉ tập trung vào "Design".
 - **Các bước thao tác (Manual Execution):**
-  - [ ] **Thao tác 1:** Kiểm tra trạng thái Git để đảm bảo branch sạch:
+  - [x] **Thao tác 1:** Kiểm tra trạng thái Git để đảm bảo branch sạch:
 ```bash
 cd ~/Projects/edge-vision-precision-landing
 git status
 ```
-  - [ ] **Thao tác 2:** Kiểm tra sự tồn tại của các file evidence từ Day 07:
+  - [x] **Thao tác 2:** Kiểm tra sự tồn tại của các file evidence từ Day 07:
 ```bash
 ls edge-vision-uav-landing/docs/WEEK1_REPORT.md
 ls edge-ai-training/docs/DATASET_MANIFEST.md
@@ -245,10 +245,10 @@ tail -n 5 edge-ai-training/docs/DATASET_MANIFEST.md
 ## Integration / Evidence Phase
 
 - **Tổng hợp Evidence:**
-  - [ ] `edge-vision-uav-landing/docs/MAVLINK_DESIGN.md` (Design doc).
-  - [ ] `edge-vision-uav-landing/src/control_py/landing_state_machine.py` (Source).
-  - [ ] `edge-vision-uav-landing/reports/state_machine_test_output.log` (Test log).
-  - [ ] `edge-ai-training/docs/DATASET_MANIFEST.md` (Updated manifest).
+  - [x] `edge-vision-uav-landing/docs/MAVLINK_DESIGN.md` (Design doc).
+  - [x] `edge-vision-uav-landing/src/control_py/landing_state_machine.py` (Source).
+  - [x] `edge-vision-uav-landing/reports/state_machine_test_output.log` (Test log).
+  - [x] `edge-ai-training/docs/DATASET_MANIFEST.md` (Updated manifest).
 
 ---
 
