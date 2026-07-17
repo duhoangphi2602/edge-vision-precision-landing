@@ -25,7 +25,7 @@ git status
 ```
   - [x] **Thao tác 2:** Kiểm tra existence của báo cáo Day 09.
 ```bash
-cat edge-vision-uav-landing/docs/closed_loop_2d_v0.md
+cat edge-vision-uav-landing/reports/closed_loop_2d_v0.md
 ```
 - **Lệnh kiểm tra:** (Như trên)
 - **Expected output:** Git working tree clean, file báo cáo Day 09 hiển thị kết quả đo lường 2D sim.
@@ -185,11 +185,11 @@ EOF
 - **Mục tiêu:** Kiểm tra các corner cases (malformed, duplicate, out-of-order, stale) và đo P50/P95 IPC latency.
 - **Mission phục vụ:** P1-A.
 - **Trạng thái hiện tại:** MISSING.
-- **File liên quan:** `edge-vision-uav-landing/src/ipc/test_udp_ipc.py`, `edge-vision-uav-landing/reports/ipc_benchmark.csv`.
+- **File liên quan:** `edge-vision-uav-landing/tests/python/test_udp_ipc.py`, `edge-vision-uav-landing/reports/ipc_benchmark.csv`.
 - **Các bước thao tác:**
   - [x] **Thao tác 1:** Viết script test & benchmark.
 ```bash
-cat << 'EOF' > edge-vision-uav-landing/src/ipc/test_udp_ipc.py
+cat << 'EOF' > edge-vision-uav-landing/tests/python/test_udp_ipc.py
 import time
 import json
 import socket
@@ -436,7 +436,7 @@ P1-A, P1-B, INFRA
 ## Evidence
 - `docs/INTERFACE_CONTRACTS.md`
 - `edge-vision-uav-landing/reports/ipc_benchmark.csv`
-- `edge-vision-uav-landing/src/ipc/test_udp_ipc.py`
+- `edge-vision-uav-landing/tests/python/test_udp_ipc.py`
 - `edge-ai-training/manifests/tracking_eval_sequences.yaml`
 
 ## Metrics

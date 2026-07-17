@@ -42,7 +42,7 @@
     ```
   - [x] **Thao tác 2:** Chạy script kiểm tra Wrong-ID để xác minh hệ thống lọc được mục tiêu và copy log output làm bằng chứng.
     ```bash
-    python edge-vision-uav-landing/test_aruco_wrong_id.py
+    python edge-vision-uav-landing/tests/python/test_aruco_wrong_id.py
     ```
 - **Command kiểm tra:** Kiểm tra xem có log output in ra terminal không.
 - **Expected output:** File CSV có số liệu, màn hình in ra kết quả PASS cho cả 2 test (Đúng ID và Sai ID).
@@ -57,9 +57,9 @@
 - **Thao tác (Manual Execution):**
   - [x] **Thao tác 1:** Tạo file báo cáo:
     ```bash
-    touch edge-vision-uav-landing/docs/WEEK1_REPORT.md
+    touch docs/reviews/WEEK1_REPORT.md
     ```
-  - [x] **Thao tác 2:** Copy TOÀN BỘ nội dung sau vào `edge-vision-uav-landing/docs/WEEK1_REPORT.md`:
+  - [x] **Thao tác 2:** Copy TOÀN BỘ nội dung sau vào `docs/reviews/WEEK1_REPORT.md`:
     ```markdown
     # Gate 1 Foundation Review & Week 1 Report
 
@@ -83,7 +83,7 @@
     ```
 - **Command kiểm tra:**
   ```bash
-  cat edge-vision-uav-landing/docs/WEEK1_REPORT.md
+  cat docs/reviews/WEEK1_REPORT.md
   ```
 - **Expected output:** Báo cáo Markdown hiển thị rõ ràng bảng kết quả.
 - **Evidence cần lưu:** `WEEK1_REPORT.md`.
@@ -165,7 +165,7 @@
     ```
   - [x] **Thao tác 3:** Commit tất cả thay đổi:
     ```bash
-    git add edge-vision-uav-landing/docs/ edge-ai-training/docs/ edge-vision-uav-landing/daily_logs/
+    git add docs/ edge-ai-training/docs/ edge-vision-uav-landing/daily_logs/
     git commit -m "docs: finalize Gate 1 foundation review and dataset v0.1 plan for Day 07"
     ```
 - **Command kiểm tra:**

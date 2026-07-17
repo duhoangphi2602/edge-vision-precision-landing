@@ -1,11 +1,12 @@
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent.parent))
 import cv2
 import numpy as np
-import sys
 import os
 
 # Thêm đường dẫn src vào PYTHONPATH để import được module
-sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
-from perception.aruco_detector import ArucoDetector
+from src.perception.aruco_detector import ArucoDetector
 
 def main():
     print("=== BAT DAU BAI TEST NHAN DIEN ARUCO ===")

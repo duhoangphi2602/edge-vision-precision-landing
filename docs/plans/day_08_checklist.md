@@ -23,7 +23,7 @@ git status
 ```
   - [x] **Thao tác 2:** Kiểm tra sự tồn tại của các file evidence từ Day 07:
 ```bash
-ls edge-vision-uav-landing/docs/WEEK1_REPORT.md
+ls docs/reviews/WEEK1_REPORT.md
 ls edge-ai-training/docs/DATASET_MANIFEST.md
 ```
 - **Lệnh kiểm tra:** (Như trên)
@@ -43,11 +43,11 @@ ls edge-ai-training/docs/DATASET_MANIFEST.md
 - **Lý do thực hiện:** Tránh sai sót về hệ trục tọa độ (frames) và giới hạn an toàn khi sau này nối vào C++. Phải thống nhất dùng `LANDING_TARGET` hay `SET_POSITION_TARGET_LOCAL_NED`.
 - **Dependency:** `MISSION_CONTRACTS.md`.
 - **Trạng thái hiện tại:** MISSING.
-- **File liên quan:** `edge-vision-uav-landing/docs/MAVLINK_DESIGN.md` (Sẽ tạo mới).
+- **File liên quan:** `docs/MAVLINK_DESIGN.md` (Sẽ tạo mới).
 - **Các bước thao tác:**
   - [x] **Thao tác 1:** Tạo file document:
 ```bash
-touch edge-vision-uav-landing/docs/MAVLINK_DESIGN.md
+touch docs/MAVLINK_DESIGN.md
 ```
   - [x] **Thao tác 2:** Copy và dán nội dung sau vào `MAVLINK_DESIGN.md`:
 
@@ -71,7 +71,7 @@ Sử dụng **SET_POSITION_TARGET_LOCAL_NED** (Offboard mode) cho việc căn ch
 
 - **Lệnh kiểm tra:**
 ```bash
-cat edge-vision-uav-landing/docs/MAVLINK_DESIGN.md
+cat docs/MAVLINK_DESIGN.md
 ```
 - **Expected output:** Nội dung markdown design hiển thị rõ ràng.
 - **Evidence cần lưu:** `MAVLINK_DESIGN.md`.
@@ -162,11 +162,11 @@ python -m py_compile edge-vision-uav-landing/src/control_py/landing_state_machin
 - **Lý do thực hiện:** Ngăn chặn UAV đâm thẳng xuống đất khi dữ liệu camera bị đứt đoạn.
 - **Dependency:** `landing_state_machine.py`.
 - **Trạng thái hiện tại:** MISSING.
-- **File liên quan:** `edge-vision-uav-landing/test_landing_state_machine.py`.
+- **File liên quan:** `edge-vision-uav-landing/tests/python/test_landing_state_machine.py`.
 - **Các bước thao tác:**
   - [x] **Thao tác 1:** Tạo file test:
 ```bash
-touch edge-vision-uav-landing/test_landing_state_machine.py
+touch edge-vision-uav-landing/tests/python/test_landing_state_machine.py
 ```
   - [x] **Thao tác 2:** Copy nội dung test sau:
 
@@ -201,7 +201,7 @@ if __name__ == "__main__":
   - [x] **Thao tác 3:** Chạy test script:
 ```bash
 mkdir -p edge-vision-uav-landing/reports/
-python edge-vision-uav-landing/test_landing_state_machine.py
+python edge-vision-uav-landing/tests/python/test_landing_state_machine.py
 ```
 - **Lệnh kiểm tra:**
 ```bash
@@ -245,7 +245,7 @@ tail -n 5 edge-ai-training/docs/DATASET_MANIFEST.md
 ## Integration / Evidence Phase
 
 - **Tổng hợp Evidence:**
-  - [x] `edge-vision-uav-landing/docs/MAVLINK_DESIGN.md` (Design doc).
+  - [x] `docs/MAVLINK_DESIGN.md` (Design doc).
   - [x] `edge-vision-uav-landing/src/control_py/landing_state_machine.py` (Source).
   - [x] `edge-vision-uav-landing/reports/state_machine_test_output.log` (Test log).
   - [x] `edge-ai-training/docs/DATASET_MANIFEST.md` (Updated manifest).
@@ -302,7 +302,7 @@ P1-A, ML
 ### Git Commit Guidance
   - [x] **Thao tác 1:** Commit các file an toàn:
 ```bash
-git add edge-vision-uav-landing/docs/MAVLINK_DESIGN.md edge-vision-uav-landing/src/control_py/landing_state_machine.py edge-vision-uav-landing/test_landing_state_machine.py edge-vision-uav-landing/reports/state_machine_test_output.log edge-vision-uav-landing/daily_logs/day_08.md edge-ai-training/docs/DATASET_MANIFEST.md
+git add docs/MAVLINK_DESIGN.md edge-vision-uav-landing/src/control_py/landing_state_machine.py edge-vision-uav-landing/tests/python/test_landing_state_machine.py edge-vision-uav-landing/reports/state_machine_test_output.log edge-vision-uav-landing/daily_logs/day_08.md edge-ai-training/docs/DATASET_MANIFEST.md
 git commit -m "feat: implement Day 08 state machine, MAVLink design and audit dataset"
 ```
 *(Lưu ý: Không dùng `git add .`)*

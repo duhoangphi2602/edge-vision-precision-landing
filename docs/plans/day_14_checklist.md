@@ -211,7 +211,7 @@ EOF
 ```
 
 ### Git Commit Guidance
-- [ ] Chạy lệnh commit:
+- [x] Chạy lệnh commit:
 ```bash
 git add docs/reviews/WEEK2_REPORT.md
 git add edge-vision-uav-landing/runs/gate2/

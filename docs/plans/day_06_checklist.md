@@ -18,10 +18,10 @@ cd ~/Projects/edge-vision-precision-landing
 - [x] **Thao tác 1:** Chạy lệnh sau để tạo file hợp đồng:
 ```bash
 mkdir -p edge-vision-uav-landing/docs
-touch edge-vision-uav-landing/docs/MISSION_CONTRACTS.md
+touch docs/MISSION_CONTRACTS.md
 ```
 
-- [x] **Thao tác 2:** Copy và dán nội dung sau vào file `edge-vision-uav-landing/docs/MISSION_CONTRACTS.md`:
+- [x] **Thao tác 2:** Copy và dán nội dung sau vào file `docs/MISSION_CONTRACTS.md`:
 ```markdown
 # Mission Contracts (v1.0)
 

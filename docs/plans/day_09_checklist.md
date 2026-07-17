@@ -25,7 +25,7 @@ git status
 ```
   - [x] **Thao tác 2:** Kiểm tra sự tồn tại của các file evidence từ Day 08:
 ```bash
-ls edge-vision-uav-landing/docs/MAVLINK_DESIGN.md
+ls docs/MAVLINK_DESIGN.md
 ls edge-vision-uav-landing/src/control_py/landing_state_machine.py
 ```
 - **Lệnh kiểm tra:** (Như trên)
@@ -166,15 +166,15 @@ ls -la edge-vision-uav-landing/reports/sim_2d_*.csv
 - **Mục tiêu:** Tổng kết báo cáo phân tích giả lập 2D.
 - **Mission phục vụ:** P1-A.
 - **Dependency:** Kết quả CSV từ Task 1.2.
-- **File liên quan:** `edge-vision-uav-landing/docs/closed_loop_2d_v0.md` (Sẽ tạo mới).
+- **File liên quan:** `edge-vision-uav-landing/reports/closed_loop_2d_v0.md` (Sẽ tạo mới).
 - **Các bước thao tác:**
   - [x] **Thao tác 1:** Tạo file report:
 ```bash
-touch edge-vision-uav-landing/docs/closed_loop_2d_v0.md
+touch edge-vision-uav-landing/reports/closed_loop_2d_v0.md
 ```
   - [x] **Thao tác 2:** Cập nhật nội dung report:
 ```bash
-cat << 'EOF' > edge-vision-uav-landing/docs/closed_loop_2d_v0.md
+cat << 'EOF' > edge-vision-uav-landing/reports/closed_loop_2d_v0.md
 # Closed-Loop 2D Simulation Report v0
 
 ## Mission
@@ -230,7 +230,7 @@ echo "EXP_002,$(date +%Y-%m-%d),YOLO26n,custom_v0_1,DEFERRED,Dataset quá nhỏ.
 - **Tổng hợp Evidence:**
   - [x] `edge-vision-uav-landing/src/simulation_2d/closed_loop_2d_sim.py` (Source)
   - [x] Các file CSV: `reports/sim_2d_*.csv` (Run artifacts)
-  - [x] `edge-vision-uav-landing/docs/closed_loop_2d_v0.md` (Report)
+  - [x] `edge-vision-uav-landing/reports/closed_loop_2d_v0.md` (Report)
   - [x] `edge-ai-training/experiments/EXPERIMENT_REGISTRY.csv` (Registry update)
 
 ---
@@ -286,7 +286,7 @@ EOF
 ```bash
 git add edge-vision-uav-landing/src/simulation_2d/closed_loop_2d_sim.py
 git add edge-vision-uav-landing/reports/sim_2d_*.csv
-git add edge-vision-uav-landing/docs/closed_loop_2d_v0.md
+git add edge-vision-uav-landing/reports/closed_loop_2d_v0.md
 git add edge-vision-uav-landing/daily_logs/day_09.md
 git add edge-ai-training/experiments/EXPERIMENT_REGISTRY.csv
 git commit -m "feat: implement Day 09 closed-loop 2D sim and defer custom ML training"

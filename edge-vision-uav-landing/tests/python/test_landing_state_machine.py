@@ -1,3 +1,6 @@
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent.parent))
 from src.control_py.landing_state_machine import LandingStateMachine, LandingState
 import time
 

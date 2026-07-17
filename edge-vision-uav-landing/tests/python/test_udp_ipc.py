@@ -1,10 +1,13 @@
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent.parent))
 import time
 import json
 import socket
 import csv
 import numpy as np
-from udp_sender import UDPSender
-from udp_receiver import UDPReceiver
+from src.ipc.udp_sender import UDPSender
+from src.ipc.udp_receiver import UDPReceiver
 
 def test_corner_cases():
     receiver = UDPReceiver(port=5001)
