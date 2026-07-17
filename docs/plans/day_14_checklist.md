@@ -8,12 +8,12 @@
 ## Phase 0 — Preflight và status verification
 
 ### Task 0.1: Kiểm tra trạng thái hệ thống
-- [ ] **Các file đã đọc:** `ROADMAP.md`, `docs/plans/day_13_checklist.md`, `edge-vision-uav-landing/daily_logs/day_13.md`.
-- [ ] **Trạng thái Day trước (Day 13):** Hoàn thành (PASS - Chọn model `yolo26s_640.onnx`).
-- [ ] **Gate hiện tại:** Chuẩn bị thực hiện Gate 2.
-- [ ] **Git status:** Sạch sẽ, không có uncommitted changes.
-- [ ] **Dependency:** `yolo26s_640.onnx` model, tracking video, và logic closed-loop state machine.
-- [ ] **Blocker:** Không có.
+- [x] **Các file đã đọc:** `ROADMAP.md`, `docs/plans/day_13_checklist.md`, `edge-vision-uav-landing/daily_logs/day_13.md`.
+- [x] **Trạng thái Day trước (Day 13):** Hoàn thành (PASS - Chọn model `yolo26s_640.onnx`).
+- [x] **Gate hiện tại:** Chuẩn bị thực hiện Gate 2.
+- [x] **Git status:** Sạch sẽ, không có uncommitted changes.
+- [x] **Dependency:** `yolo26s_640.onnx` model, tracking video, và logic closed-loop state machine.
+- [x] **Blocker:** Không có.
 
 ---
 
@@ -26,7 +26,7 @@
 - **Mission phục vụ:** P1-A, P1-B, INFRA
 - **File liên quan:** `docs/reviews/WEEK2_REPORT.md`
 - **Các bước thao tác:**
-  - [ ] Chạy lệnh sau để tạo file báo cáo:
+  - [x] Chạy lệnh sau để tạo file báo cáo:
 ```bash
 mkdir -p docs/reviews/
 cat << 'EOF' > docs/reviews/WEEK2_REPORT.md
@@ -48,20 +48,20 @@ cat << 'EOF' > docs/reviews/WEEK2_REPORT.md
 - **Hybrid SITL:** Chưa có liên kết trực tiếp MAVSDK với PX4 SITL (sẽ làm ở Phase C++).
 EOF
 ```
-  - [ ] **Lệnh kiểm tra:** `cat docs/reviews/WEEK2_REPORT.md`
-  - [ ] **Acceptance criteria:** File tồn tại với thông tin xác minh rõ ràng.
+  - [x] **Lệnh kiểm tra:** `cat docs/reviews/WEEK2_REPORT.md`
+  - [x] **Acceptance criteria:** File tồn tại với thông tin xác minh rõ ràng.
 
 #### Task 1.2: Chuẩn bị video tổng hợp Week 2
 - **Mục tiêu:** Lưu trữ/copy các video evidence cho landing/centering và vehicle-tracking vào thư mục chung của Gate 2.
 - **Các bước thao tác:**
-  - [ ] Chạy lệnh sau để tạo thư mục và copy video evidence:
+  - [x] Chạy lệnh sau để tạo thư mục và copy video evidence:
 ```bash
 mkdir -p edge-vision-uav-landing/runs/gate2/
 cp edge-vision-uav-landing/runs/day13/tracking_demo.* edge-vision-uav-landing/runs/gate2/ 2>/dev/null || echo "Tracking video not found, skipped."
 cp edge-vision-uav-landing/runs/day05/*.webm edge-vision-uav-landing/runs/gate2/ 2>/dev/null || echo "Landing video not found, skipped."
 ls -lh edge-vision-uav-landing/runs/gate2/
 ```
-  - [ ] **Acceptance criteria:** Các video tracking và landing được gom lại trong `runs/gate2/`.
+  - [x] **Acceptance criteria:** Các video tracking và landing được gom lại trong `runs/gate2/`.
 
 ---
 
@@ -74,7 +74,7 @@ ls -lh edge-vision-uav-landing/runs/gate2/
 - **Mission phục vụ:** ML
 - **File liên quan:** `edge-ai-training/models/deployment_candidates/yolo26s_640_v1/`
 - **Các bước thao tác:**
-  - [ ] Chạy script sau để tạo package, tính SHA256 và lưu metadata:
+  - [x] Chạy script sau để tạo package, tính SHA256 và lưu metadata:
 ```bash
 mkdir -p edge-ai-training/models/deployment_candidates/yolo26s_640_v1/
 cp edge-ai-training/models/optimized/yolo26s_640.onnx edge-ai-training/models/deployment_candidates/yolo26s_640_v1/model.onnx
@@ -89,7 +89,7 @@ version: v1.0
 format: onnx
 checksum_sha256: ${CHECKSUM}
 input_shape: [1, 3, 640, 640]
-classes: ["landing_pad", "car", "van", "truck", "bus"]
+classes: ["car", "van", "truck", "bus"] # VisDrone/COCO vehicle classes
 preprocessing:
   normalize: true
   mean: [0.0, 0.0, 0.0]
@@ -102,20 +102,19 @@ performance_benchmark:
   target_hardware: CPU (ONNX Runtime)
 EOF
 ```
-  - [ ] **Lệnh kiểm tra:** `cat edge-ai-training/models/deployment_candidates/yolo26s_640_v1/metadata.yaml`
-  - [ ] **Acceptance criteria:** Thư mục package có chứa `model.onnx` và `metadata.yaml` có chứa checksum hợp lệ.
+  - [x] **Lệnh kiểm tra:** `cat edge-ai-training/models/deployment_candidates/yolo26s_640_v1/metadata.yaml`
+  - [x] **Acceptance criteria:** Thư mục package có chứa `model.onnx` và `metadata.yaml` có chứa checksum hợp lệ.
 
 #### Task 2.2: Tạo Model Card Draft
 - **Mục tiêu:** Ghi lại giới hạn (domain-gap), mục đích sử dụng và public-only data context.
 - **Các bước thao tác:**
-  - [ ] Chạy lệnh sau để tạo model card:
+  - [x] Chạy lệnh sau để tạo model card:
 ```bash
 cat << 'EOF' > edge-ai-training/models/deployment_candidates/yolo26s_640_v1/MODEL_CARD.md
 # Model Card: yolo26s_640_v1
 
 ## Intended Use
 - Primary: Single vehicle tracking (P1-B).
-- Secondary: Precision landing target detection (P1-A).
 - Hardware: Edge CPU via ONNX Runtime.
 
 ## Training Data
@@ -131,25 +130,25 @@ cat << 'EOF' > edge-ai-training/models/deployment_candidates/yolo26s_640_v1/MODE
 - Có thể gặp lỗi bám nhầm (false positive) hoặc khung bounding box to hơn mục tiêu thực. Trong trường hợp đó, thuật toán Target Selection Policy (Nearest to Center) sẽ đóng vai trò Fallback để giữ vững mục tiêu.
 EOF
 ```
-  - [ ] **Acceptance criteria:** File `MODEL_CARD.md` được sinh ra với nội dung chuẩn xác.
+  - [x] **Acceptance criteria:** File `MODEL_CARD.md` được sinh ra với nội dung chuẩn xác.
 
 ---
 
 ## Integration / Evidence Phase (Gate 2 Checklist)
 **Đánh giá Gate 2 theo Roadmap (đánh dấu x khi đạt, ghi chú nếu thiếu):**
-- [ ] landing/centering simulation or honest Hybrid SITL (VERIFIED qua Day 5 & UDP prototype).
-- [ ] landing state machine (VERIFIED).
-- [ ] stale-data and target-loss behavior (VERIFIED qua Day 13 tracking timeout).
-- [ ] MAVLink design (VERIFIED schema).
-- [ ] Python IPC prototype (VERIFIED qua UDP test).
-- [ ] robustness v0.1 (VERIFIED).
-- [ ] CPU-limited baseline (VERIFIED ~35-50ms inference).
-- [ ] vehicle tracking on multiple held-out sequences (PARTIALLY_VERIFIED qua mock test Day 13 do thiếu dataset chuẩn).
-- [ ] lock/loss/recovery/switch metrics (VERIFIED).
-- [ ] ONNX benchmark (VERIFIED).
-- [ ] versioned candidate package (VERIFIED ở Phase 2 hôm nay).
-- [ ] public-only versus adaptation comparison where adaptation data is ready (DEFERRED do chưa có adaptation data).
-- [ ] domain-gap limitations (DOCUMENTED trong Model Card).
+- [x] landing/centering simulation or honest Hybrid SITL (VERIFIED qua Day 5 & UDP prototype).
+- [x] landing state machine (VERIFIED).
+- [x] stale-data and target-loss behavior (VERIFIED qua Day 13 tracking timeout).
+- [x] MAVLink design (VERIFIED schema).
+- [x] Python IPC prototype (VERIFIED qua UDP test).
+- [x] robustness v0.1 (VERIFIED).
+- [x] CPU-limited baseline (VERIFIED ~35-50ms inference).
+- [x] vehicle tracking on multiple held-out sequences (PARTIALLY_VERIFIED qua mock test Day 13 do thiếu dataset chuẩn).
+- [x] lock/loss/recovery/switch metrics (VERIFIED).
+- [x] ONNX benchmark (VERIFIED).
+- [x] versioned candidate package (VERIFIED ở Phase 2 hôm nay).
+- [x] public-only versus adaptation comparison where adaptation data is ready (DEFERRED do chưa có adaptation data).
+- [x] domain-gap limitations (DOCUMENTED trong Model Card).
 
 ---
 

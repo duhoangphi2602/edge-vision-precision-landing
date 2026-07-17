@@ -1,0 +1,16 @@
+model_name: yolo26s_640
+version: v1.0
+format: onnx
+checksum_sha256: f20f3a6de748f50d46050bc69fd3f7519fae31a73f006b04c0cb72c25c70bdff
+input_shape: [1, 3, 640, 640]
+classes: ["car", "van", "truck", "bus"]
+preprocessing:
+  normalize: true
+  mean: [0.0, 0.0, 0.0]
+  std: [1.0, 1.0, 1.0]
+postprocessing:
+  confidence_threshold: 0.40
+  nms_iou_threshold: 0.45
+performance_benchmark:
+  p50_latency_ms: 35.0
+  target_hardware: CPU (ONNX Runtime)
