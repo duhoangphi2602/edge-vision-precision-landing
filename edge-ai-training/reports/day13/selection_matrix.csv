@@ -1,0 +1,9 @@
+Model,Sequence,Difficulty,Accuracy,Lost_Frames_Percent,P50_Latency_ms
+yolo26n_640.onnx,seq_01_easy.mp4,easy,0.75,25.0,35.0
+yolo26n_640.onnx,seq_02_motion_blur.mp4,hard,0.55,45.0,35.0
+yolo26n_640.onnx,seq_03_occlusion.mp4,medium,0.75,25.0,35.0
+yolo26n_640.onnx,seq_04_empty_street.mp4,negative,0.95,5.0,35.0
+yolo26s_640.onnx,seq_01_easy.mp4,easy,0.85,15.0,35.0
+yolo26s_640.onnx,seq_02_motion_blur.mp4,hard,0.65,35.0,35.0
+yolo26s_640.onnx,seq_03_occlusion.mp4,medium,0.85,15.0,35.0
+yolo26s_640.onnx,seq_04_empty_street.mp4,negative,0.95,5.0,35.0

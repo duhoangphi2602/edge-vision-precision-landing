@@ -2689,6 +2689,7 @@ Document the system so a reviewer can understand every input, output, process, a
 ### Machine A — Deep-dive tasks
 
 - Complete `TECHNICAL_DESIGN.md`.
+- Include Workspace-Level Portfolio Demo Orchestration in design: clarify menu is just an optional presentation/orchestration layer, projects remain completely independent, direct command remains source of truth, and menu is NOT part of the flight-control runtime.
 - Complete `MISSION_CONTRACTS.md` and `INTERFACE_CONTRACTS.md`.
 - Include architecture, sequence diagrams, schemas, coordinate transforms, state machine, deployment profiles, logging, errors, and fallback modes.
 - Document the difference between full SITL, Hybrid SITL, replay, and webcam evidence.
@@ -2809,7 +2810,7 @@ Docker/local setup, one-command tests, release asset structure.
 
 ### Acceptance criteria
 
-No absolute path is required; missing assets produce clear errors; repeated runs are functionally equivalent within documented tolerances.
+Docker containers boot and run mission tests in full headless mode. Direct wrapper scripts run independently. Docker/CI is explicitly NOT forced to use any interactive menu. No absolute path is required; missing assets produce clear errors; repeated runs are functionally equivalent within documented tolerances.
 
 ### Required evidence
 
@@ -2880,6 +2881,9 @@ Create a reviewer-facing demonstration that shows products, evidence, and limita
 ### Machine A — Deep-dive tasks
 
 - Finalize four wrapper scripts: landing replay, landing SITL/hybrid, vehicle tracking, stabilization comparison.
+- Create an optional workspace-level menu (e.g. portfolio-demo/portfolio_demo.py & demo_registry.yaml).
+- Menu purely dispatches existing tested direct commands. It handles interactive UX, signal handling (Ctrl+C), exit code propagation, and shows artifact paths.
+- STRICT RULE: No mission logic, perception, tracking, or model evaluation is allowed inside the menu source code.
 - Write `DEMO_SCRIPT.md` for a 3–5 minute video.
 - Include problem, architecture, target definitions, inputs, state/failsafe, C++ path, runtime, Project 2, results, and limitations.
 - Make success and failure cases visible.
@@ -2927,6 +2931,7 @@ Make the portfolio understandable within minutes and defensible in an interview.
 ### Machine A — Deep-dive tasks
 
 - Finalize Project 1 and Project 2 READMEs.
+- Document two specific usage patterns in README: 1. Interactive portfolio navigation (for reviewers). 2. Direct reproducible commands (for automation/headless).
 - Answer explicitly: where the drone lands, marker ID/size, what vehicle is tracked, how it is selected, where input comes from, how to run, what is measured, and what is not proven.
 - Complete `DEPLOYMENT.md`.
 - Create `INTERVIEW_NOTES.md` explaining design decisions and trade-offs.
@@ -2976,6 +2981,7 @@ Test the portfolio as a stranger with no local workspace state.
 
 - Clone into a clean temporary location.
 - Run setup, unit tests, contract tests, replay demos, and Docker CPU profiles.
+- Test workspace menu: verify it starts cleanly, calls the correct project scripts without absolute paths, propagates child process exit codes, and displays clear errors if models/configs are missing.
 - Verify config/model/input paths, download instructions, output structure, and failure messages.
 - Test missing model/input/config behavior.
 - Complete `CLEAN_CLONE_TEST.md`.
@@ -3045,7 +3051,7 @@ All gate evidence.
 
 ### Expected outputs
 
-Final tagged release, portfolio summary, videos, reports, two project packages.
+Final tagged release, portfolio summary, videos, reports, two project packages, and an optional workspace-level portfolio demo launcher (orchestration layer) that delegates execution to the independent project pipelines.
 
 ### Acceptance criteria
 

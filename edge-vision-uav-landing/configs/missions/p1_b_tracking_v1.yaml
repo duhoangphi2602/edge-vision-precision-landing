@@ -1,0 +1,11 @@
+mission_id: P1_B_SINGLE_VEHICLE_TRACKING
+primary_class: car
+detector_classes:
+  - car
+  - van
+  - truck
+  - bus
+selection_policy: nearest_to_frame_center
+confidence_threshold: 0.40
+lost_timeout_ms: 1000
+tracker_type: bytetrack
