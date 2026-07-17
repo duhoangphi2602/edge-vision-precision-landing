@@ -1,0 +1,2 @@
+[CMD-LOG] Time: 100500 ms | Mode: VELOCITY | Vx: 0.1 Vy: -0.2 Vz: 0.5 | YawRate: 0 | Mask: 0x5c7
+MAVLink Bridge tests PASSED!
