@@ -4,3 +4,7 @@ add_library(control_cpp STATIC
     src/control_loop.cpp
 )
 target_include_directories(control_cpp PUBLIC include)
+
+# Add Test Executable
+add_executable(test_pid src/test_pid.cpp)
+target_link_libraries(test_pid control_cpp)
