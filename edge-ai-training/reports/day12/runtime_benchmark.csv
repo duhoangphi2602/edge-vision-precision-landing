@@ -1,0 +1,5 @@
+Model,Format,P50_Latency_ms,P95_Latency_ms
+YOLO26n,PyTorch,12.75,17.05
+YOLO26n,ONNX,8.9,14.08
+YOLO26s,PyTorch,12.03,20.33
+YOLO26s,ONNX,11.12,14.25

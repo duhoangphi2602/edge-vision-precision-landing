@@ -1,0 +1,20 @@
+mission_id: P1_A_ROBUSTNESS_TEST
+scenarios:
+  - id: "fault_delay_100ms"
+    initial_offset_x: 1.0
+    initial_offset_y: 1.0
+    network_delay_sec: 0.1
+    frame_drop_rate: 0.0
+    cpu_restriction_hz: 30
+  - id: "fault_frame_drop_50"
+    initial_offset_x: 1.0
+    initial_offset_y: 1.0
+    network_delay_sec: 0.01
+    frame_drop_rate: 0.5
+    cpu_restriction_hz: 30
+  - id: "fault_cpu_throttle_10hz"
+    initial_offset_x: 1.0
+    initial_offset_y: 1.0
+    network_delay_sec: 0.01
+    frame_drop_rate: 0.0
+    cpu_restriction_hz: 10

@@ -24,4 +24,5 @@ pyrightconfig.json
 edge-vision-uav-landing/pyrightconfig.json
 runs/
 **/*.pt
+**/*.onnx
 .vscode/
