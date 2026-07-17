@@ -27,7 +27,7 @@
 - **Mission phục vụ:** P1-A
 - **File liên quan:** `edge-vision-uav-landing/src/control_cpp/include/failsafe.hpp`
 - **Các bước thao tác:**
-  - [ ] Chạy lệnh để ghi đè file header:
+  - [x] Chạy lệnh để ghi đè file header:
 ```bash
 cat << 'EOF' > edge-vision-uav-landing/src/control_cpp/include/failsafe.hpp
 #pragma once
@@ -70,14 +70,14 @@ private:
 } // namespace control
 EOF
 ```
-  - [ ] **Acceptance criteria:** Header định nghĩa đầy đủ cấu trúc.
+  - [x] **Acceptance criteria:** Header định nghĩa đầy đủ cấu trúc.
 
 #### Task 1.2: Implement logic `failsafe.cpp`
 - **Mục tiêu:** Hiện thực logic kiểm tra stale data và invalid target.
 - **Mission phục vụ:** P1-A
 - **File liên quan:** `edge-vision-uav-landing/src/control_cpp/src/failsafe.cpp`
 - **Các bước thao tác:**
-  - [ ] Chạy lệnh ghi đè file cpp:
+  - [x] Chạy lệnh ghi đè file cpp:
 ```bash
 cat << 'EOF' > edge-vision-uav-landing/src/control_cpp/src/failsafe.cpp
 #include "failsafe.hpp"
@@ -127,7 +127,7 @@ EOF
 - **Mission phục vụ:** P1-A
 - **File liên quan:** `edge-vision-uav-landing/src/control_cpp/include/state_machine.hpp`
 - **Các bước thao tác:**
-  - [ ] Chạy lệnh:
+  - [x] Chạy lệnh:
 ```bash
 cat << 'EOF' > edge-vision-uav-landing/src/control_cpp/include/state_machine.hpp
 #pragma once
@@ -178,7 +178,7 @@ EOF
 - **Mục tiêu:** Thực hiện logic chuyển trạng thái và zero-velocity fallback.
 - **Mission phục vụ:** P1-A
 - **Các bước thao tác:**
-  - [ ] Chạy lệnh:
+  - [x] Chạy lệnh:
 ```bash
 cat << 'EOF' > edge-vision-uav-landing/src/control_cpp/src/state_machine.cpp
 #include "state_machine.hpp"
@@ -274,7 +274,7 @@ EOF
 
 #### Task 3.1: Viết Unit Test kiểm tra Reaction & Failures
 - **Các bước thao tác:**
-  - [ ] Chạy lệnh để ghi file `test_failsafe.cpp`:
+  - [x] Chạy lệnh để ghi file `test_failsafe.cpp`:
 ```bash
 cat << 'EOF' > edge-vision-uav-landing/src/control_cpp/src/test_failsafe.cpp
 #include "failsafe.hpp"
@@ -323,7 +323,7 @@ int main() {
 }
 EOF
 ```
-  - [ ] Cập nhật `CMakeLists.txt`:
+  - [x] Cập nhật `CMakeLists.txt`:
 ```bash
 cat << 'EOF' > edge-vision-uav-landing/src/control_cpp/CMakeLists.txt
 add_library(control_cpp STATIC
@@ -341,7 +341,7 @@ add_executable(test_failsafe src/test_failsafe.cpp)
 target_link_libraries(test_failsafe control_cpp)
 EOF
 ```
-  - [ ] Chạy build và test:
+  - [x] Chạy build và test:
 ```bash
 cd edge-vision-uav-landing/build
 cmake ..
@@ -349,7 +349,7 @@ make
 ./src/control_cpp/test_failsafe
 cd ../..
 ```
-  - [ ] **Expected output:** In ra `Failsafe and State Machine Unit Tests PASSED!`.
+  - [x] **Expected output:** In ra `Failsafe and State Machine Unit Tests PASSED!`.
 
 ---
 
@@ -360,7 +360,7 @@ cd ../..
 - **Mission phục vụ:** ML
 - **File liên quan:** `edge-ai-training/reports/failure_analysis_stub.md`
 - **Các bước thao tác:**
-  - [ ] Chạy lệnh:
+  - [x] Chạy lệnh:
 ```bash
 cat << 'EOF' > edge-ai-training/reports/failure_analysis_stub.md
 # Failure Case Analysis
@@ -398,13 +398,13 @@ EOF
 ### Verification Matrix
 | Hạng mục | Evidence yêu cầu | Trạng thái đầu ngày | Điều kiện hoàn thành |
 |---|---|---|---|
-| Failsafe age check | `test_failsafe` assert | MISSING | Age > 200ms triggers STALE |
-| State transitions | `test_failsafe` assert | MISSING | Critical error transitions to SEARCH/FAILSAFE |
-| Report | MD file | MISSING | File exists |
+| Failsafe age check | `test_failsafe` assert | PASS | Age > 200ms triggers STALE |
+| State transitions | `test_failsafe` assert | PASS | Critical error transitions to SEARCH/FAILSAFE |
+| Report | MD file | PASS | File exists |
 
 ### Gate Decision Template
 - **Gate:** C++ Failsafe Manager
-- **Status:** PASS / FAIL
+- **Status:** PASS
 - **Passed criteria:** Mọi test vượt qua, state machine xử lý đủ 8 state.
 - **Missing criteria:** None
 - **Blocked criteria:** None
@@ -445,7 +445,7 @@ EOF
 ```
 
 ### Git Commit Guidance
-- [ ] Stage các file:
+- [x] Stage các file:
 ```bash
 git add docs/plans/day_17_checklist.md
 git add edge-vision-uav-landing/src/control_cpp/include/failsafe.hpp
@@ -457,7 +457,7 @@ git add edge-vision-uav-landing/src/control_cpp/CMakeLists.txt
 git add edge-ai-training/reports/failure_analysis_stub.md
 git add edge-vision-uav-landing/daily_logs/day_17.md
 ```
-- [ ] Lệnh commit:
+- [x] Lệnh commit:
 ```bash
 git commit -m "feat: implement C++ failsafe manager and landing state machine for Day 17"
 ```
