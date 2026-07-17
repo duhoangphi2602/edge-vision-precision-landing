@@ -206,7 +206,7 @@ python scripts/test_pose_estimation.py
 💡 **Quyết định kiến trúc & Giải thích:**
 - `coco8.yaml` chỉ dùng để smoke test môi trường, KHÔNG dùng làm baseline portfolio.
 - Baseline portfolio bắt buộc dùng `VisDrone.yaml` (dữ liệu UAV thật từ trên không).
-- Mô hình ban đầu dùng `yolo11n.pt` (Nano) để phù hợp mục tiêu edge deployment.
+- Mô hình ban đầu dùng `yolo26n.pt` (Nano) để phù hợp mục tiêu edge deployment.
 
 ### Task 5A — Environment verification
 - [x] **Kiểm tra GPU và môi trường**
@@ -222,7 +222,7 @@ yolo checks
 ### Task 5B — Pipeline smoke test
 - [x] **Smoke test (Không phải baseline)**
 ```bash
-yolo detect train data=coco8.yaml model=yolo11n.pt epochs=1 imgsz=640 batch=4 device=0 project=experiments name=SMOKE_coco8_yolo11n
+yolo detect train data=coco8.yaml model=yolo26n.pt epochs=1 imgsz=640 batch=4 device=0 project=experiments name=SMOKE_coco8_yolo26n
 ```
 *(Lưu ý: Không dùng metric vào portfolio, không gọi weight này là baseline).*
 
@@ -248,7 +248,7 @@ touch reports/dataset_audit_visdrone_v1.md
 ### Task 5E — Train baseline thật
 - [x] **Train baseline UAV-domain v0.1**
 ```bash
-yolo detect train data=VisDrone.yaml model=yolo11n.pt epochs=30 patience=10 imgsz=640 batch=-1 device=0 seed=42 deterministic=True cache=disk project=experiments name=TRN_001_visdrone_yolo11n_640
+yolo detect train data=VisDrone.yaml model=yolo26n.pt epochs=30 patience=10 imgsz=640 batch=-1 device=0 seed=42 deterministic=True cache=disk project=experiments name=TRN_001_visdrone_yolo26n_640
 ```
 *(Lưu ý fallback: Nếu thiếu VRAM dùng batch nhỏ hơn, thiếu RAM tắt cache. Đây là baseline, chưa phải final optimized model).*
 

@@ -1091,7 +1091,7 @@ SHA256SUMS
 Example filename:
 
 ```text
-vehicle_yolo11n_visdrone_v1_640_onnx_fp32_v0.1.0.onnx
+vehicle_yolo26n_visdrone_v1_640_onnx_fp32_v0.1.0.onnx
 ```
 
 Do not use ambiguous release names such as:
@@ -1706,7 +1706,7 @@ Create the first reproducible portfolio detector baseline on UAV-domain data.
 ### Machine B — Deep-dive tasks
 
 - Prepare or verify the VisDrone baseline experiment.
-- Use `yolo11n` and an explicitly recorded image size, default 640.
+- Use `yolo26n` and an explicitly recorded image size, default 640.
 - Preserve official splits or a reproducibly generated subset.
 - Save command, resolved config, seed, environment, results, curves, checkpoint, and notes.
 - Register `TRN_001` or the established baseline ID.
@@ -3380,10 +3380,10 @@ Next morning:
 Recommended naming:
 
 ```text
-EXP_001_yolo11n_visdrone_640_baseline
-EXP_002_yolo11n_visdrone_highres
-EXP_003_yolo11n_aug_profile
-EXP_004_yolo11s_capacity
+EXP_001_yolo26n_visdrone_640_baseline
+EXP_002_yolo26n_visdrone_highres
+EXP_003_yolo26n_aug_profile
+EXP_004_yolo26s_capacity
 EXP_005_public_to_custom_v0_1
 EXP_006_onnx_fp32_cpu
 EXP_007_openvino_fp32_fp16

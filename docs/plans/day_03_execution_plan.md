@@ -33,7 +33,7 @@
 ## 7. Machine B Tasks (Nhiệm vụ Machine B - PC GPU)
 - Khởi tạo thư mục Dataset Manifest và Audit.
 - Tải dataset UAV cho target tracking (VisDrone).
-- Train UAV-domain YOLO baseline v0.1: `yolo detect train data=VisDrone.yaml ... name=EXP_001_visdrone_yolo11n_640_baseline`
+- Train UAV-domain YOLO baseline v0.1: `yolo detect train data=VisDrone.yaml ... name=EXP_001_visdrone_yolo26n_640_baseline`
 - Lưu lại mô hình `best.pt`, file `results.csv`, và các metrics chứng minh (evidence).
 
 ## 8. Shared Tasks (Nhiệm vụ chung)
@@ -62,9 +62,9 @@ python scripts/calibrate_camera.py
 (Trên PC GPU)
 ```bash
 # Chạy lệnh smoke test để đảm bảo môi trường
-yolo detect train data=coco8.yaml model=yolo11n.pt epochs=1 project=experiments name=SMOKE_coco8_yolo11n
+yolo detect train data=coco8.yaml model=yolo26n.pt epochs=1 project=experiments name=SMOKE_coco8_yolo26n
 # Sau khi pass, chạy lệnh training baseline thật
-yolo detect train data=VisDrone.yaml model=yolo11n.pt epochs=30 patience=10 batch=-1 imgsz=640 project=experiments name=EXP_001_visdrone_yolo11n_640_baseline
+yolo detect train data=VisDrone.yaml model=yolo26n.pt epochs=30 patience=10 batch=-1 imgsz=640 project=experiments name=EXP_001_visdrone_yolo26n_640_baseline
 ```
 
 ## 11. Verification Commands (Lệnh kiểm tra)

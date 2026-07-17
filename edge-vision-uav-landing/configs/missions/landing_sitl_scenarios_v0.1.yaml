@@ -1,0 +1,18 @@
+mission_id: P1_A_FIXED_ARUCO_LANDING
+scenarios:
+  - id: "offset_0.5m"
+    initial_offset_x: 0.5
+    initial_offset_y: 0.0
+    marker_loss_injection_sec: 0.0
+  - id: "offset_1.0m"
+    initial_offset_x: 1.0
+    initial_offset_y: 0.0
+    marker_loss_injection_sec: 0.0
+  - id: "offset_2.0m"
+    initial_offset_x: 1.414
+    initial_offset_y: 1.414
+    marker_loss_injection_sec: 0.0
+  - id: "marker_loss_test"
+    initial_offset_x: 0.5
+    initial_offset_y: 0.5
+    marker_loss_injection_sec: 2.0  # Test ngắt target trong lúc descent

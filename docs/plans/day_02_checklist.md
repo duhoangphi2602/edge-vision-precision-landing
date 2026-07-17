@@ -220,7 +220,7 @@ source ../.venv/bin/activate
 ```
 - [ ] Chạy huấn luyện YOLO baseline bản Nano (quá trình này chứng minh môi trường Pytorch/Ultralytics đã sẵn sàng):
 ```bash
-yolo detect train model=yolo11n.pt data=coco8.yaml imgsz=640 epochs=10 batch=16 project=experiments name=yolo_baseline_v0
+yolo detect train model=yolo26n.pt data=coco8.yaml imgsz=640 epochs=10 batch=16 project=experiments name=yolo_baseline_v0
 ```
   *(Lưu ý: Bạn có thể thay đổi `coco8.yaml` bằng `dataset.yaml` của tập VisDrone thu gọn tùy ý)*
 

@@ -1,2 +1,0 @@
-yolo detect train data=VisDrone.yaml model=yolo11n.pt epochs=30 patience=10 imgsz=640 batch=-1 device=0 seed=42 deterministic=True cache=disk project=experiments name=TRN_001_visdrone_yolo11n_640
-# Lệnh này được phục dựng và xác minh chính xác 100% dựa vào file args.yaml được YOLO lưu lại.

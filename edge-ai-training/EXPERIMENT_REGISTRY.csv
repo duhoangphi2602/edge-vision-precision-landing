@@ -1,2 +1,4 @@
 Experiment_ID,Date,Model_Type,Dataset_Version,Epochs,Batch_Size,mAP50,mAP50-95,Notes
-TRN_001,2026-07-14,YOLOv11n,VisDrone2019,50,-1,0.25,0.15,Baseline model (auto-batch issue)
+TRN_001,2026-07-17,YOLO26n,VisDrone,30,16,0.301,0.261,YOLO26n 640px baseline
+TRN_002,2026-07-17,YOLO26n,VisDrone,30,8,0.374,0.354,YOLO26n 960px resolution scale
+TRN_003,2026-07-17,YOLO26s,VisDrone,30,16,0.383,0.370,YOLO26s 640px complexity scale

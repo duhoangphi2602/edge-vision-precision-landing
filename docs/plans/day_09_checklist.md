@@ -218,7 +218,7 @@ EOF
 mkdir -p edge-ai-training/experiments/
 touch edge-ai-training/experiments/EXPERIMENT_REGISTRY.csv
 echo "EXP_ID,DATE,MODEL,DATASET,STATUS,NOTE" > edge-ai-training/experiments/EXPERIMENT_REGISTRY.csv
-echo "EXP_002,$(date +%Y-%m-%d),YOLOv11n,custom_v0_1,DEFERRED,Dataset quá nhỏ. Chỉ đánh giá trên public baseline VisDrone. Đợi collect thêm." >> edge-ai-training/experiments/EXPERIMENT_REGISTRY.csv
+echo "EXP_002,$(date +%Y-%m-%d),YOLO26n,custom_v0_1,DEFERRED,Dataset quá nhỏ. Chỉ đánh giá trên public baseline VisDrone. Đợi collect thêm." >> edge-ai-training/experiments/EXPERIMENT_REGISTRY.csv
 ```
 - **Evidence cần lưu:** `EXPERIMENT_REGISTRY.csv`.
 - **Acceptance criteria:** Trì hoãn một cách có chủ đích và có lưu vết (Audit Trail).

@@ -14,7 +14,7 @@
 - `COMMAND.txt` phải là lệnh thực tế đã chạy, không phải lệnh được phục dựng cảm tính (có thể dẫn đến sai lệch thông số ngầm).
 - Chỉ training lại nếu evidence gốc đã bị mất hoàn toàn và model hiện tại không thể tái lập. Nếu `args.yaml` còn, nó chính là provenance vững chắc nhất.
 
-- [x] **Tạo `COMMAND.txt` với provenance:** Lấy lệnh từ history hoặc dựa vào `args.yaml` để tạo file `COMMAND.txt` trong `edge-ai-training/experiments/TRN_001_visdrone_yolo11n_640`. (Ghi chú rõ bên trong nếu đây là lệnh được trích xuất lại từ `args.yaml`).
+- [x] **Tạo `COMMAND.txt` với provenance:** Lấy lệnh từ history hoặc dựa vào `args.yaml` để tạo file `COMMAND.txt` trong `edge-ai-training/experiments/TRN_001_visdrone_yolo26n_640`. (Ghi chú rõ bên trong nếu đây là lệnh được trích xuất lại từ `args.yaml`).
 - [x] **Viết `NOTES.md` đầy đủ:** Ghi rõ bối cảnh (môi trường, seed, GPU dùng để train, thông số rút ra từ `args.yaml`).
 - [x] **Kiểm tra curves và failure cases:** Đảm bảo YOLO đã tự sinh ra `results.png` và các ảnh `val_batch*.jpg`. Nếu có, xác nhận chúng đã tồn tại thay vì tự tạo giả.
 
@@ -240,12 +240,12 @@ python scripts/simulate_pid_offline.py
   - **Hệ lụy:** Khi so sánh 2 model (640px vs 960px), bạn không biết sự khác biệt độ chính xác mAP đến từ việc tăng Resolution hay do bị giảm Batch Size (Batch size quá nhỏ làm nhiễu đạo hàm Gradient).
   - **Giải pháp:** Bắt buộc phải tìm ra Batch Size thực tế của bản 640px, sau đó khóa cứng thông số này (Fixed batch) khi train bản 960px. Nếu máy bị "Tràn bộ nhớ" (Out of Memory - OOM), đành chấp nhận giảm Batch nhưng phải GHI CHÚ CHỮ TO vào báo cáo khoa học.
 
-- [x] **[Machine B] Thao tác 8:** Kiểm tra file `edge-ai-training/experiments/TRN_001_visdrone_yolo11n_640/args.yaml`, tìm dòng `batch:` để xem con số thực tế hôm qua nó tính ra là bao nhiêu (VD: 8, 16...).
+- [x] **[Machine B] Thao tác 8:** Kiểm tra file `edge-ai-training/experiments/TRN_001_visdrone_yolo26n_640/args.yaml`, tìm dòng `batch:` để xem con số thực tế hôm qua nó tính ra là bao nhiêu (VD: 8, 16...).
 - [x] **[Machine B] Thao tác 9:** Mở Terminal trên PC GPU, di chuyển vào thư mục AI và chạy lệnh Train với `imgsz=960`, chốt cứng con số batch vừa tìm được (Ví dụ: `batch=16`). Nếu báo lỗi OOM, giảm xuống `batch=8` và ghi chú lại:
 ```bash
 cd ~/Projects/edge-vision-precision-landing/edge-ai-training
 source ../.venv/bin/activate
-yolo detect train data=VisDrone.yaml model=yolo11n.pt epochs=30 patience=10 imgsz=960 batch=8 device=0 seed=42 deterministic=True cache=disk project=experiments name=TRN_002_visdrone_yolo11n_960
+yolo detect train data=VisDrone.yaml model=yolo26n.pt epochs=30 patience=10 imgsz=960 batch=8 device=0 seed=42 deterministic=True cache=disk project=experiments name=TRN_002_visdrone_yolo26n_960
 ```
 - [x] **[Machine B] Thao tác 11:** Trong lúc máy Train, đi uống cà phê. Sau khi xong, thu thập `results.csv` của cả 2 bản để xuất báo cáo so sánh vào `edge-ai-training/reports/resolution_ablation_v0.md`.
 

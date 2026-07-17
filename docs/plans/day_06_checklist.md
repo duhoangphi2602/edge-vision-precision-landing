@@ -205,7 +205,7 @@ touch edge-ai-training/EXPERIMENT_REGISTRY.csv
 - [x] **Thao tác 2:** Copy dán header chuẩn này vào `EXPERIMENT_REGISTRY.csv`:
 ```csv
 Experiment_ID,Date,Model_Type,Dataset_Version,Epochs,Batch_Size,mAP50,mAP50-95,Notes
-TRN_001,2026-07-14,YOLOv11n,VisDrone2019,50,-1,0.25,0.15,Baseline model (auto-batch issue)
+TRN_001,2026-07-14,YOLO26n,VisDrone2019,50,-1,0.25,0.15,Baseline model (auto-batch issue)
 ```
 
 ## Thống kê cuối ngày & Dọn dẹp
