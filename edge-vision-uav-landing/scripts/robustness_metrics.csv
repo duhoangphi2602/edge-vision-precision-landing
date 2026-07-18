@@ -1,0 +1,6 @@
+Metric,Value
+Target lock rate (Clean baseline),93.5%
+Target lock rate (Faults),72.1%
+ONNX CPU FPS,16.2
+P95 inference latency,85 ms
+Target-switch count,12
