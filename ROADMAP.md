@@ -2640,28 +2640,29 @@ Turn ad-hoc tests into a repeatable cross-mission regression suite.
 
 ### Machine A — Deep-dive tasks
 
-- Create automated replay cases for noise, blur, occlusion, frame drop, delay, wrong marker, stale packet, IPC loss, and target loss during descent.
-- Add vehicle-tracking cases for occlusion, crowding, tiny target, re-entry, and no-target video.
-- Add Project 2 cases for low texture, rotation, blur, and border/crop artifacts.
-- Define pass/fail thresholds in config rather than code.
+- Transition from pure synthetic video fixtures to Real-World **VisDrone** evaluation sequences (`uav0000137_00458_v`).
+- Create an automated Robustness Suite injecting **9 visual faults** across **18 severity levels** (Medium and High): blur, motion blur, noise, brightness, overexposure, contrast reduction, compression, resolution degradation, and occlusion.
+- Generate segregated datasets: native `.jpg` Image Sequences (for YOLO Tracker load) and H.264 `viewable.mp4` Videos (for human verification/reports).
+- Run automated visual fault regression comparisons (Clean vs. 18 Corrupted sequences) and log performance drop metrics (MOTA, IDF1).
+- Add runtime fault injection simulation (delay, packet drop, jitter).
 
 ### Machine B — Goal
 
-Perform controlled hard-negative and hard-example mining.
+Perform controlled hard-negative and hard-example mining based on VisDrone fault failures.
 
 ### Machine B — Deep-dive tasks
 
-- Record source sequence, frame, failure category, model version, prediction, ground truth, and training decision.
-- Add analogous examples from the train/custom pool rather than contaminating the held-out set.
+- Record source sequence, frame, failure category, predictions, and ground truth when tracker fails on specific fault intensities.
+- Mine hard examples from training sets that exhibit similar faults (e.g., severe motion blur, extreme overexposure) to improve model robustness.
 - Register any follow-up experiment before running it.
 
 ### Inputs
 
-Regression inputs, failure reports.
+VisDrone real-world sequence `uav0000137_00458_v`, failure reports, `robustness_thresholds.yaml`.
 
 ### Expected outputs
 
-Robustness suite v1, regression manifests, hard-example manifests.
+Robustness suite v1 (18 VisDrone sequences + 19 viewable videos), regression metric logs, hard-example manifests.
 
 ### Acceptance criteria
 

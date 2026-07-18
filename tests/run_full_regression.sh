@@ -1,0 +1,1 @@
+../edge-vision-uav-landing/tests/run_full_regression.sh

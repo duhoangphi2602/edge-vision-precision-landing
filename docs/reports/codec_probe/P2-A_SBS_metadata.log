@@ -1,0 +1,13 @@
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'runs/P2-A/20260718_113318/side_by_side_raw_viewable.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.1.100
+  Duration: 00:00:30.08, start: 0.000000, bitrate: 823 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1536x432 [SAR 1:1 DAR 32:9], 822 kb/s, 12.50 fps, 12.50 tbr, 12800 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.3.100 libx264
+At least one output file must be specified

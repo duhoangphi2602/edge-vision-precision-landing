@@ -1,0 +1,17 @@
+seed: 12345
+faults:
+  - type: marker_loss
+    probability: 0.1
+    duration_frames: [5, 15]
+  - type: wrong_marker_id
+    probability: 0.05
+    id: 42
+  - type: blur
+    probability: 0.2
+    kernel_size: [5, 15]
+  - type: delay
+    probability: 0.05
+    delay_ms: [100, 300]
+  - type: stale_observation
+    probability: 0.05
+    stale_frames: [3, 10]

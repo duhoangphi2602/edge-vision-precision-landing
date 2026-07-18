@@ -1,0 +1,21 @@
+fault_suites:
+  blur_medium:
+    fault_type: blur
+    severity: medium
+    kernel_size: 15
+    probability: 1.0
+  noise_high:
+    fault_type: noise
+    severity: high
+    noise_variance: 50
+    probability: 1.0
+  combined_heavy_weather:
+    fault_type: combined
+    severity: high
+    faults:
+      - type: low_light
+        gamma: 0.3
+      - type: noise
+        noise_variance: 30
+      - type: blur
+        kernel_size: 7

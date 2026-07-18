@@ -1,0 +1,16 @@
+seed: 67890
+faults:
+  - type: occlusion
+    probability: 0.1
+    duration_frames: [10, 30]
+  - type: frame_drop
+    probability: 0.05
+    drop_count: [1, 5]
+  - type: blur
+    probability: 0.15
+    kernel_size: [7, 21]
+  - type: target_loss
+    probability: 0.02
+  - type: camera_jitter
+    probability: 0.2
+    amplitude: [2, 10]

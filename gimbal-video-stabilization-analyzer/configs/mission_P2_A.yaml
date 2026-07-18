@@ -1,0 +1,8 @@
+mission_id: P2_A_VIDEO_STABILIZATION
+mission_superclass: vehicle
+primary_demo_class: car
+detector_classes: [car, van, truck, bus]
+target_metrics:
+  - camera_trajectory_jitter
+  - target_lock_rate
+  - processing_fps

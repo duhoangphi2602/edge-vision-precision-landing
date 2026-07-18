@@ -1,0 +1,9 @@
+evaluation_contract:
+  asset_id: "visdrone2019_mot_val_uav0000137_00458_v"
+  model_version: yolov8n.pt
+  confidence_threshold: 0.10
+  reference_frame: 0
+  reference_bbox_xyxy: "755,273,812,316" # Extracted from the parser for target_id 111 (w=57, h=43) => 755+57=812, 273+43=316
+  evaluable_frames: 192
+  flags:
+    - VISUAL_COMPARISON_ONLY

@@ -1,0 +1,28 @@
+# JSON Schema for Gimbal Video Stabilization Evaluation Contract
+type: object
+required:
+  - evaluation_contract
+properties:
+  evaluation_contract:
+    type: object
+    required:
+      - asset_id
+      - model_version
+      - confidence_threshold
+    properties:
+      asset_id:
+        type: string
+      model_version:
+        type: string
+      confidence_threshold:
+        type: number
+      reference_frame:
+        type: integer
+      reference_bbox_xyxy:
+        type: string
+      evaluable_frames:
+        type: integer
+      flags:
+        type: array
+        items:
+          type: string

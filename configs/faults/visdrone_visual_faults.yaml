@@ -1,0 +1,19 @@
+fault_suites:
+  visdrone_blur_medium: { fault_type: blur, severity: medium, kernel_size: 15 }
+  visdrone_blur_high: { fault_type: blur, severity: high, kernel_size: 35 }
+  visdrone_motion_blur_medium: { fault_type: motion_blur, severity: medium, kernel_size: 20 }
+  visdrone_motion_blur_high: { fault_type: motion_blur, severity: high, kernel_size: 45 }
+  visdrone_noise_medium: { fault_type: noise, severity: medium, noise_variance: 25 }
+  visdrone_noise_high: { fault_type: noise, severity: high, noise_variance: 60 }
+  visdrone_brightness_medium: { fault_type: brightness, severity: medium, gamma: 1.5 }
+  visdrone_brightness_high: { fault_type: brightness, severity: high, gamma: 3.0 }
+  visdrone_overexposure_medium: { fault_type: overexposure, severity: medium, gamma: 0.5 }
+  visdrone_overexposure_high: { fault_type: overexposure, severity: extreme, gamma: 0.15 }
+  visdrone_contrast_reduction_medium: { fault_type: contrast_reduction, severity: medium, alpha: 0.7 }
+  visdrone_contrast_reduction_high: { fault_type: contrast_reduction, severity: high, alpha: 0.3 }
+  visdrone_compression_medium: { fault_type: compression, severity: medium, quality: 30 }
+  visdrone_compression_high: { fault_type: compression, severity: extreme, quality: 5 }
+  visdrone_resolution_degradation_medium: { fault_type: resolution_degradation, severity: medium, scale: 0.5 }
+  visdrone_resolution_degradation_high: { fault_type: resolution_degradation, severity: high, scale: 0.15 }
+  visdrone_occlusion_medium: { fault_type: occlusion, severity: medium, block_size: 100 }
+  visdrone_occlusion_high: { fault_type: occlusion, severity: high, block_size: 250 }

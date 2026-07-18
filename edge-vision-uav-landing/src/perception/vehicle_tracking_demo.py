@@ -7,6 +7,11 @@ import csv
 import numpy as np
 from ultralytics import YOLO
 
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent.parent))
+from scripts.utils.run_manager import add_standard_args, create_run_dir, save_run_metadata
+
 class VehicleTracker:
     def __init__(self, config_path, model_path):
         with open(config_path, 'r') as f:
@@ -18,8 +23,9 @@ class VehicleTracker:
         self.target_id = None
         self.tracking_state = "SEARCH" # SEARCH, LOCKED, LOST
         self.last_seen_time = 0
-        self.lost_timeout = self.config['lost_timeout_ms'] / 1000.0
-        self.conf_thresh = self.config['confidence_threshold']
+        self.lost_timeout = self.config.get('lost_timeout_ms', 500) / 1000.0
+        self.conf_thresh = self.config.get('confidence_threshold', 0.25)
+        self.detector_classes = self.config.get('detector_classes', ['car', 'bus', 'truck'])
         
     def process_frame(self, frame):
         h, w = frame.shape[:2]
@@ -42,7 +48,7 @@ class VehicleTracker:
             for box, trk_id, conf, cls_id in zip(boxes, ids, confs, cls_ids):
                 class_name = result.names[cls_id]
                 # Filter classes
-                if class_name in self.config['detector_classes']:
+                if class_name in self.detector_classes:
                     cx = (box[0] + box[2]) / 2
                     cy = (box[1] + box[3]) / 2
                     dist = np.sqrt((cx - center_x)**2 + (cy - center_y)**2)
@@ -89,30 +95,34 @@ class VehicleTracker:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", required=True)
-    parser.add_argument("--model", required=True)
-    parser.add_argument("--video", required=True)
-    parser.add_argument("--out_dir", required=True)
+    add_standard_args(parser)
+    parser.add_argument("--reference-bbox", type=str, help="Reference bbox to lock on, e.g. 0:50,100,250,233")
     args = parser.parse_args()
     
-    os.makedirs(args.out_dir, exist_ok=True)
+    out_dir, run_id = create_run_dir(args, "P2-A")
     
-    tracker = VehicleTracker(args.config, args.model)
-    cap = cv2.VideoCapture(args.video)
+    # We load defaults for YOLO config and model
+    config_path = "edge-vision-uav-landing/configs/tracker_config.yaml"
+    model_path = "edge-vision-uav-landing/models/yolov8n.pt"
+    if not os.path.exists(config_path):
+        config_path = "edge-vision-uav-landing/configs/perception.yaml"
+    
+    tracker = VehicleTracker(config_path, model_path)
+    cap = cv2.VideoCapture(args.input)
     
     if not cap.isOpened():
-        print(f"Error opening video file {args.video}")
-        exit()
+        print(f"Error opening video file {args.input}")
+        exit(1)
         
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = int(cap.get(cv2.CAP_PROP_FPS))
     
-    out_video = os.path.join(args.out_dir, "tracking_demo.mp4")
+    out_video = os.path.join(out_dir, "tracking_output.mp4")
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = cv2.VideoWriter(out_video, fourcc, fps, (width, height))
     
-    log_file = os.path.join(args.out_dir, "tracking_metrics.csv")
+    log_file = os.path.join(out_dir, "tracking_metrics.csv")
     csv_f = open(log_file, 'w', newline='')
     writer = csv.writer(csv_f)
     writer.writerow(["frame", "state", "target_id", "infer_latency_ms"])
@@ -132,4 +142,11 @@ if __name__ == "__main__":
     cap.release()
     out.release()
     csv_f.close()
+    
+    save_run_metadata(out_dir, vars(args), tracker.config, "python3 " + " ".join(sys.argv))
+    
+    if args.export_viewable:
+        view_copy = os.path.join(os.path.dirname(__file__), '../../../tools/video/create_viewable_copy.py')
+        os.system(f"python3 {view_copy} --input {out_video} --export-viewable")
+    
     print(f"Saved video to {out_video} and metrics to {log_file}")

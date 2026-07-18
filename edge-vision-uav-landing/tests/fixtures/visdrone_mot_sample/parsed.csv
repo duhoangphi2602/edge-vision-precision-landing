@@ -1,0 +1,7 @@
+sequence_id,frame_id,target_id,class_id,x,y,w,h,occlusion,truncation,visibility
+unknown,1,1,4,100,200,50,50,0,0,1.0
+unknown,1,2,4,300,400,60,60,0,0,1.0
+unknown,2,1,4,105,205,50,50,0,0,1.0
+unknown,2,2,4,305,405,60,60,0,0,1.0
+unknown,3,1,4,110,210,50,50,0,0,1.0
+unknown,3,2,4,310,410,60,60,0,0,1.0

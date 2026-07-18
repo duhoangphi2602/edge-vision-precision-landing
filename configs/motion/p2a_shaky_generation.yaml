@@ -1,0 +1,13 @@
+seed: 13579
+motion:
+  translation:
+    amplitude_x: [10, 30]
+    amplitude_y: [5, 20]
+    frequency: [0.5, 2.0]
+  rotation:
+    amplitude_deg: [1.0, 5.0]
+    frequency: [0.1, 1.0]
+  smoothing:
+    window_size: 5
+  crop:
+    border_px: 50

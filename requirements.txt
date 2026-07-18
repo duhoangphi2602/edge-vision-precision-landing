@@ -11,3 +11,5 @@ ultralytics
 psutil
 rich
 types-PyYAML
+imageio
+ruamel.yaml

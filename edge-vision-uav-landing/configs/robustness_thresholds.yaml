@@ -1,0 +1,12 @@
+# Pass/Fail Thresholds for Real-World Robustness Suite (VisDrone)
+missions:
+  P1-A:
+    target_lock_rate_min: 0.85
+    max_e2e_latency_p95_ms: 100.0
+    max_landing_error_radius_m: 0.5
+  P1-B: # Tracking Vehicle
+    target_present_lock_rate_min: 0.70 # Phải lock được 70% số frame có chứa target
+    tracking_switches_max: 2 # Không được đổi ID liên tục
+    bbox_iou_threshold: 0.5
+  P2-A:
+    stabilized_lock_rate_min_recovery: 0.15

@@ -1,0 +1,7 @@
+evaluation_contract:
+  asset_id: "synthetic_car_tracking"
+  model_version: yolov8n.pt
+  confidence_threshold: 0.10
+  reference_frame: 0
+  reference_bbox_xyxy: "50,100,250,233"
+  evaluable_frames: 150

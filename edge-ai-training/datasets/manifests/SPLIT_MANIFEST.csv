@@ -1,0 +1,8 @@
+split_role,description
+train,Model tuning only
+validation,Model validation
+held_out_test,Final metrics only
+smoke_test,1 sequence pipeline validation
+regression_fixture,Deterministic synthetic test
+reviewer_demo,Clean runs for human review
+failure_case,Known edge cases
