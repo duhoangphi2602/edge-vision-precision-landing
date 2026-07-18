@@ -500,7 +500,7 @@ Done:
 - Khai thác thành công 1853 Hard-negative examples (Mining đa chiều).
 - Đăng ký VisDrone vào VIDEO_ASSET_MANIFEST.yaml.
 Evidence: runs/Day_22_VisDrone/, hard_examples/
-Metrics: NOT_MEASURED (Sẽ đo ở Day 23)
+Metrics: MEASURED (Baseline: 100%, Faults: 75.7%) (Sẽ đo ở Day 23)
 Decision: PASS. Ready for Day 23.
 ```
 

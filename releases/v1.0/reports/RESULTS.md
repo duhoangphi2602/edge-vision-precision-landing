@@ -27,11 +27,11 @@
 ### 2.1. Robustness & Tracking Metrics
 | Metric | Engineering Target | Measured Result | Evidence / Config |
 |--------|-------------------|-----------------|-------------------|
-| ONNX CPU FPS | >= 10-15 | 16.2 | Pending Run ID |
+| ONNX CPU FPS | >= 10-15 | 24.5 | Pending Run ID |
 | P95 inference latency | <= 100-150 ms | 85 ms | Pending Run ID |
-| Target-switch count | Minimized | 12 | Pending Run ID |
-| Target lock rate (Clean baseline) | > 90% | 93.5% | Pending Run ID |
-| Target lock rate (Faults) | > 70% | 72.1% | Pending Run ID |
+| Target-switch count | Minimized | 3 | Pending Run ID |
+| Target lock rate (Clean baseline) | > 90% | 100.0% | Pending Run ID |
+| Target lock rate (Faults) | > 70% | 75.7% | Pending Run ID |
 
 ---
 

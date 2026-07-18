@@ -1,0 +1,5 @@
+seq_id,avg_jitter_original,avg_jitter_stabilized,lock_rate
+seq_original,6.09,3.19,PENDING_VALIDATION
+seq_low,7.01,3.50,PENDING_VALIDATION
+seq_med,6.21,3.08,PENDING_VALIDATION
+seq_high,15.21,3.68,PENDING_VALIDATION

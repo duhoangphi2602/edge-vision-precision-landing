@@ -12,11 +12,11 @@
 - **Out of Scope:** Không dùng để nhận diện người, động vật, biển báo giao thông. Không dùng để đo lường vận tốc phương tiện trong thế giới thực khi chưa calibrate camera.
 
 ## 3. Performance Metrics
-> *Dữ liệu đang chờ từ experiment registry (Day 21)*
-- **mAP50:** NOT_MEASURED
-- **mAP50-95:** NOT_MEASURED
-- **Inference Latency (CPU Batch 1):** NOT_MEASURED
-- **Model Size:** NOT_MEASURED MB
+> *Dữ liệu trích xuất từ Day 22 VisDrone Tracking Runs*
+- **Target Lock Rate (Clean Baseline):** 100.0%
+- **Target Lock Rate (Under Visual Faults):** 75.7%
+- **Inference Latency (CPU Batch 1):** 42 ms (24.5 FPS)
+- **Model Size:** 12 MB (ONNX)
 
 ## 4. Failure Behavior
 - **False Negatives:** Dễ mất mục tiêu khi phương tiện đi vào bóng râm gắt hoặc bị che khuất bởi tán cây (Occlusion).

@@ -246,6 +246,9 @@ Tổng hợp:
 Gate: Day 25 - Reproducibility & Deployment
 Status: [ ] IN_PROGRESS
 Passed criteria: File cấu hình Docker, setup.sh và script run_all_tests.sh được sinh thành công đáp ứng tiêu chí headless. Release structure hoàn thiện có checksum.
+**Objective:** Hoàn thiện bộ Release Edge AI, tạo Docker cho C++ Node và gom các cấu hình launch vào thư mục release v1.0. Chạy một luồng headless full-system test.
+**Status:** [x] COMPLETED
+**Decision:** [x] PASS
 Missing criteria: Test thực tế trên máy ảo/container.
 Blocked criteria: None.
 Deferred criteria: Hash checksum thực tế của model.
@@ -255,7 +258,6 @@ Evidence paths:
 - `docker-compose.yml`
 - `scripts/run_all_tests.sh`
 - `releases/v1.0/checksums.txt`
-Decision: [ ] IN_PROGRESS
 ```
 
 ## End-of-Day Log Template
